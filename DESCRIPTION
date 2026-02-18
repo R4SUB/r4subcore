@@ -5,11 +5,12 @@ Version: 0.1.0
 Authors@R:
     person("Pawan Rama", "Mali", email = "prm@outlook.in",
            role = c("aut", "cre", "cph"))
-Description: Foundational package in the R4SUB ecosystem. Defines the core
-    evidence table schema, parsers, indicator abstractions, and scoring
-    primitives needed to quantify clinical submission readiness. Provides a
-    standardized contract for ingesting heterogeneous sources (validation
-    outputs, metadata, traceability) into a single evidence framework.
+Description: Foundational package in the R4SUB (R for Regulatory Submission)
+    ecosystem. Defines the core evidence table schema, parsers, indicator
+    abstractions, and scoring primitives needed to quantify clinical submission
+    readiness. Provides a standardized contract for ingesting heterogeneous
+    sources (validation outputs, metadata, traceability) into a single
+    evidence framework.
 License: MIT + file LICENSE
 URL: https://github.com/R4SUB/r4subcore
 BugReports: https://github.com/R4SUB/r4subcore/issues

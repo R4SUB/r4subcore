@@ -29,6 +29,18 @@ which was not reflected in `Authors@R`. Fixed:
 - Authors@R now includes the `cph` (copyright holder) role for Pawan Rama Mali
   alongside the existing `aut` and `cre` roles
 
+### 4. Acronyms
+
+The following acronym appears in the Description field and has been expanded
+on first use:
+
+- **R4SUB**: now written as "R4SUB (R for Regulatory Submission)" on first
+  mention in the Description field. This is the name of the broader open-source
+  ecosystem this package belongs to; it is not a pre-existing industry standard
+  abbreviation.
+
+No other non-obvious acronyms appear in the Title or Description fields.
+
 ---
 
 ## Test environments
