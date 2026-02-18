@@ -18,8 +18,17 @@ Returns a summary data.frame with counts grouped by domain, severity,
 result, and source.
 }
 \examples{
-\dontrun{
+ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
+ev <- suppressMessages(as_evidence(
+  data.frame(
+    asset_type = "validation", asset_id = "ADSL",
+    source_name = "pinnacle21", indicator_id = "SD0001",
+    indicator_name = "SD0001", indicator_domain = "quality",
+    severity = "high", result = "fail",
+    stringsAsFactors = FALSE
+  ),
+  ctx = ctx
+))
 evidence_summary(ev)
-}
 
 }

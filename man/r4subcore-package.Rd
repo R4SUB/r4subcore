@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Pawan Rama Mali \email{prm@outlook.in}
+\strong{Maintainer}: Pawan Rama Mali \email{prm@outlook.in} [copyright holder]
 
 }
 \keyword{internal}

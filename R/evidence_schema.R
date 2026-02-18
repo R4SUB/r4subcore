@@ -217,9 +217,18 @@ as_evidence <- function(x, ctx = NULL, ...) {
 #' @return `TRUE` invisibly if valid; throws an error otherwise.
 #'
 #' @examples
-#' \dontrun{
-#' validate_evidence(my_evidence)
-#' }
+#' ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
+#' ev <- suppressMessages(as_evidence(
+#'   data.frame(
+#'     asset_type = "validation", asset_id = "ADSL",
+#'     source_name = "pinnacle21", indicator_id = "SD0001",
+#'     indicator_name = "SD0001", indicator_domain = "quality",
+#'     severity = "high", result = "fail",
+#'     stringsAsFactors = FALSE
+#'   ),
+#'   ctx = ctx
+#' ))
+#' validate_evidence(ev)
 #'
 #' @importFrom cli cli_abort
 #' @export
@@ -285,9 +294,23 @@ validate_evidence <- function(ev) {
 #' @return A single combined evidence data.frame.
 #'
 #' @examples
-#' \dontrun{
-#' combined <- bind_evidence(ev1, ev2)
+#' ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
+#' make_ev <- function(ind_id) {
+#'   suppressMessages(as_evidence(
+#'     data.frame(
+#'       asset_type = "validation", asset_id = "ADSL",
+#'       source_name = "pinnacle21", indicator_id = ind_id,
+#'       indicator_name = ind_id, indicator_domain = "quality",
+#'       severity = "low", result = "pass",
+#'       stringsAsFactors = FALSE
+#'     ),
+#'     ctx = ctx
+#'   ))
 #' }
+#' ev1 <- make_ev("IND-001")
+#' ev2 <- make_ev("IND-002")
+#' combined <- suppressMessages(bind_evidence(ev1, ev2))
+#' nrow(combined)
 #'
 #' @importFrom cli cli_alert_success
 #' @export
@@ -312,9 +335,18 @@ bind_evidence <- function(...) {
 #'   `source_name`, and `n`.
 #'
 #' @examples
-#' \dontrun{
+#' ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
+#' ev <- suppressMessages(as_evidence(
+#'   data.frame(
+#'     asset_type = "validation", asset_id = "ADSL",
+#'     source_name = "pinnacle21", indicator_id = "SD0001",
+#'     indicator_name = "SD0001", indicator_domain = "quality",
+#'     severity = "high", result = "fail",
+#'     stringsAsFactors = FALSE
+#'   ),
+#'   ctx = ctx
+#' ))
 #' evidence_summary(ev)
-#' }
 #'
 #' @export
 evidence_summary <- function(ev) {

@@ -3,7 +3,8 @@ Title: Core Data Contracts, Parsers, and Scoring Primitives for Clinical
     Submission Readiness
 Version: 0.1.0
 Authors@R:
-    person("Pawan Rama", "Mali", email = "prm@outlook.in", role = c("aut", "cre"))
+    person("Pawan Rama", "Mali", email = "prm@outlook.in",
+           role = c("aut", "cre", "cph"))
 Description: Foundational package in the R4SUB ecosystem. Defines the core
     evidence table schema, parsers, indicator abstractions, and scoring
     primitives needed to quantify clinical submission readiness. Provides a
