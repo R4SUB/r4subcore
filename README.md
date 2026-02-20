@@ -1,5 +1,7 @@
 # r4subcore
 
+[![R-CMD-check](https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml) [![CRAN status](https://www.r-pkg.org/badges/version/r4subcore)](https://CRAN.R-project.org/package=r4subcore) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/r4subcore)](https://CRAN.R-project.org/package=r4subcore) [![r-universe](https://r4sub.r-universe.dev/badges/r4subcore)](https://r4sub.r-universe.dev/r4subcore)
+
 **r4subcore** is the foundational package in the **R4SUB** ecosystem. It defines the **core data contracts, parsers, evidence schema, and scoring primitives** needed to quantify *clinical submission readiness*.
 
 It is intentionally "boring and stable": other R4SUB packages (e.g., `r4subtrace`, `r4subrisk`, `r4subscore`) build on these structures and interfaces.
@@ -43,6 +45,11 @@ Clinical submission readiness is rarely a single tool output. It's an **evidence
 ---
 
 ## Installation
+
+### CRAN
+```r
+install.packages("r4subcore")
+```
 
 ### Development install
 ```r
