@@ -1,6 +1,5 @@
 Package: r4subcore
-Title: Core Data Contracts, Parsers, and Scoring Primitives for Clinical
-    Submission Readiness
+Title: Core Contracts, Parsers, and Scoring Primitives
 Version: 0.1.0
 Authors@R:
     person("Pawan Rama", "Mali", email = "prm@outlook.in",
