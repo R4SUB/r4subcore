@@ -57,137 +57,79 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="r4subcore">r4subcore<a class="anchor" aria-label="anchor" href="#r4subcore"></a>
 </h1></div>
-<p><a href="https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://CRAN.R-project.org/package=r4subcore" class="external-link"><img src="https://www.r-pkg.org/badges/version/r4subcore" alt="CRAN status"></a> <a href="https://CRAN.R-project.org/package=r4subcore" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/r4subcore" alt="CRAN downloads"></a> <a href="https://r4sub.r-universe.dev/r4subcore" class="external-link"><img src="https://r4sub.r-universe.dev/badges/r4subcore" alt="r-universe"></a></p>
-<p><strong>r4subcore</strong> is the foundational package in the <strong>R4SUB</strong> ecosystem. It defines the <strong>core data contracts, parsers, evidence schema, and scoring primitives</strong> needed to quantify <em>clinical submission readiness</em>.</p>
-<p>It is intentionally “boring and stable”: other R4SUB packages (e.g., <code>r4subtrace</code>, <code>r4subrisk</code>, <code>r4subscore</code>) build on these structures and interfaces.</p>
-<hr>
-<div class="section level2">
-<h2 id="why-r4subcore">Why r4subcore?<a class="anchor" aria-label="anchor" href="#why-r4subcore"></a>
-</h2>
-<p>Clinical submission readiness is rarely a single tool output. It’s an <strong>evidence graph</strong> across:</p>
-<ul>
-<li>SDTM/ADaM datasets and metadata</li>
-<li>Define.xml / ARM / reviewer guides</li>
-<li>Validation results (Pinnacle21, OpenCDISC, internal rule engines)</li>
-<li>Traceability / derivations (ADaM spec &lt;-&gt; code &lt;-&gt; outputs)</li>
-<li>Usability / reviewer experience signals</li>
-</ul>
-<p><strong>r4subcore</strong> provides: 1. A standardized <strong>Evidence Table</strong> schema 2. Common <strong>parsers</strong> to ingest heterogeneous sources 3. A consistent <strong>indicator / signal</strong> abstraction 4. <strong>Scoring primitives</strong> (normalize, weight, calibrate, aggregate) 5. A reproducible <strong>run context</strong> (run_id, dataset_id, study_id, tool version)</p>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="package-scope">Package scope<a class="anchor" aria-label="anchor" href="#package-scope"></a>
-</h2>
-<div class="section level3">
-<h3 id="in-scope">In scope<a class="anchor" aria-label="anchor" href="#in-scope"></a>
-</h3>
-<ul>
-<li>Evidence schema + validation</li>
-<li>Parsers for common sources (initial focus on P21-style outputs + define.xml scaffolding)</li>
-<li>Common utilities: ID generation, severity mapping, controlled terminology mapping, standard columns</li>
-<li>Indicator interfaces (how other packages implement signals)</li>
-<li>Transparent scoring components (no hidden “magic”)</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="out-of-scope">Out of scope<a class="anchor" aria-label="anchor" href="#out-of-scope"></a>
-</h3>
-<ul>
-<li>Full SCI (Submission Confidence Index) calculation (belongs in <code>r4subscore</code>)</li>
-<li>End-to-end dashboards / Shiny apps (belongs in <code>r4subui</code>)</li>
-<li>Full traceability logic (belongs in <code>r4subtrace</code>)</li>
-<li>Domain-specific oncology rules (belongs in extension packages)</li>
-</ul>
-<hr>
-</div>
-</div>
+<!-- badges: start -->
+
+<p><strong>r4subcore</strong> is the foundational package in the <strong>R4SUB</strong> ecosystem. It defines the <strong>core data contracts, parsers, evidence schema, and scoring primitives</strong> needed to quantify clinical submission readiness.</p>
+<p>It is intentionally stable: other R4SUB packages (<code>r4subtrace</code>, <code>r4subrisk</code>, <code>r4subscore</code>, <code>r4subusability</code>) build on these structures and interfaces.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="cran">CRAN<a class="anchor" aria-label="anchor" href="#cran"></a>
-</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"r4subcore"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="development-install">Development install<a class="anchor" aria-label="anchor" href="#development-install"></a>
-</h3>
+<p>Development version:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"R4SUB/r4subcore"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
-</h3>
-<ul>
-<li>R &gt;= 4.2</li>
-<li>Suggested: <code>arrow</code>, <code>xml2</code>, <code>dplyr</code>, <code>readr</code>, <code>jsonlite</code>, <code>cli</code>
-</li>
-</ul>
-<hr>
-</div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"R4SUB/r4subcore"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="core-concepts">Core concepts<a class="anchor" aria-label="anchor" href="#core-concepts"></a>
+<h2 id="core-concepts">Core Concepts<a class="anchor" aria-label="anchor" href="#core-concepts"></a>
 </h2>
 <div class="section level3">
-<h3 id="id_1-evidence-table-the-heart-of-r4sub">1) Evidence Table (the heart of R4SUB)<a class="anchor" aria-label="anchor" href="#id_1-evidence-table-the-heart-of-r4sub"></a>
+<h3 id="evidence-table">Evidence Table<a class="anchor" aria-label="anchor" href="#evidence-table"></a>
 </h3>
-<p>All inputs are normalized into a single tabular contract: an <strong>evidence</strong> dataset. This enables scoring, drilldown, traceability, and reporting.</p>
-<p><strong>Minimum columns (v0.1):</strong></p>
+<p>All inputs are normalized into a single tabular contract — an <strong>evidence</strong> dataset. This enables scoring, drilldown, traceability, and reporting.</p>
 <table class="table">
 <colgroup>
-<col width="21%">
-<col width="8%">
-<col width="69%">
+<col width="33%">
+<col width="33%">
+<col width="33%">
 </colgroup>
 <thead><tr class="header">
-<th>column</th>
-<th>type</th>
-<th>meaning</th>
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>run_id</code></td>
 <td>chr</td>
-<td>unique ID for a run</td>
+<td>Unique ID for a run</td>
 </tr>
 <tr class="even">
 <td><code>study_id</code></td>
 <td>chr</td>
-<td>study identifier</td>
+<td>Study identifier</td>
 </tr>
 <tr class="odd">
 <td><code>asset_type</code></td>
 <td>chr</td>
 <td>
-<code>dataset</code>, <code>define</code>, <code>program</code>, <code>validation</code>, <code>spec</code>, etc.</td>
+<code>dataset</code>, <code>define</code>, <code>program</code>, <code>validation</code>, <code>spec</code>, <code>other</code>
+</td>
 </tr>
 <tr class="even">
 <td><code>asset_id</code></td>
 <td>chr</td>
-<td>unique ID of the asset (e.g., <code>ADSL</code>, <code>define.xml</code>)</td>
+<td>Asset identifier (e.g. <code>ADSL</code>, <code>define.xml</code>)</td>
 </tr>
 <tr class="odd">
 <td><code>source_name</code></td>
 <td>chr</td>
-<td>tool/source name (e.g., <code>pinnacle21</code>)</td>
+<td>Tool or source name (e.g. <code>pinnacle21</code>)</td>
 </tr>
 <tr class="even">
 <td><code>source_version</code></td>
 <td>chr</td>
-<td>tool version</td>
+<td>Tool version</td>
 </tr>
 <tr class="odd">
 <td><code>indicator_id</code></td>
 <td>chr</td>
-<td>the signal definition identifier</td>
+<td>Signal definition identifier</td>
 </tr>
 <tr class="even">
 <td><code>indicator_name</code></td>
 <td>chr</td>
-<td>human name</td>
+<td>Human-readable indicator name</td>
 </tr>
 <tr class="odd">
 <td><code>indicator_domain</code></td>
@@ -213,166 +155,96 @@
 <tr class="even">
 <td><code>metric_value</code></td>
 <td>dbl</td>
-<td>numeric value (if applicable)</td>
+<td>Numeric value (if applicable)</td>
 </tr>
 <tr class="odd">
 <td><code>metric_unit</code></td>
 <td>chr</td>
-<td>unit for metric</td>
+<td>Unit for metric</td>
 </tr>
 <tr class="even">
 <td><code>message</code></td>
 <td>chr</td>
-<td>short description</td>
+<td>Short description</td>
 </tr>
 <tr class="odd">
 <td><code>location</code></td>
 <td>chr</td>
-<td>pointer (dataset/variable/rule line)</td>
+<td>Pointer (dataset / variable / rule)</td>
 </tr>
 <tr class="even">
 <td><code>evidence_payload</code></td>
 <td>json</td>
-<td>raw structured payload</td>
+<td>Raw structured payload</td>
 </tr>
 <tr class="odd">
 <td><code>created_at</code></td>
 <td>POSIXct</td>
-<td>ingestion timestamp</td>
+<td>Ingestion timestamp</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Guarantees:</strong></p>
-<ul>
-<li>Each row is a single unit of evidence</li>
-<li>Evidence is immutable (append-only semantics recommended)</li>
-<li>Score consumers can rely on consistent meaning</li>
-</ul>
-<p>Use:</p>
-<ul>
-<li>
-<code><a href="reference/as_evidence.html">as_evidence()</a></code> to coerce raw data</li>
-<li>
-<code><a href="reference/validate_evidence.html">validate_evidence()</a></code> to enforce contract</li>
-<li>
-<code><a href="reference/bind_evidence.html">bind_evidence()</a></code> to combine sources safely</li>
-</ul>
-<hr>
 </div>
 <div class="section level3">
-<h3 id="id_2-indicators-signals">2) Indicators (signals)<a class="anchor" aria-label="anchor" href="#id_2-indicators-signals"></a>
-</h3>
-<p>An <strong>indicator</strong> is a definition of <em>what to measure</em>, not necessarily how to calculate it.</p>
-<p>Indicators have:</p>
-<ul>
-<li>
-<code>indicator_id</code> (stable)</li>
-<li>
-<code>domain</code> (quality/trace/risk/usability)</li>
-<li><code>description</code></li>
-<li>
-<code>expected_inputs</code> (evidence sources required)</li>
-<li><code>default_thresholds</code></li>
-<li>optional <code>tags</code> (e.g., <code>define</code>, <code>adam</code>, <code>sdtm</code>, <code>spec</code>)</li>
-</ul>
-<p><code>r4subcore</code> provides:</p>
-<ul>
-<li>indicator registry helpers (local registry first, remote later)</li>
-<li>validation to ensure indicator metadata is well-formed</li>
-</ul>
-<p>Other packages implement the actual calculations and output evidence rows using these IDs.</p>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_3-scoring-primitives-transparent--composable">3) Scoring primitives (transparent &amp; composable)<a class="anchor" aria-label="anchor" href="#id_3-scoring-primitives-transparent--composable"></a>
-</h3>
-<p><code>r4subcore</code> includes <strong>small, auditable</strong> functions for:</p>
-<ul>
-<li>mapping severity -&gt; numeric penalty</li>
-<li>normalizing metrics to 0-1</li>
-<li>applying weights</li>
-<li>aggregating evidence into indicator scores</li>
-</ul>
-<p>SCI itself is not in this package.</p>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
-</h2>
-<div class="section level3">
-<h3 id="create-a-run-context">Create a run context<a class="anchor" aria-label="anchor" href="#create-a-run-context"></a>
+<h3 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r4sub.github.io/r4subcore/">r4subcore</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/r4sub_run_context.html">r4sub_run_context</a></span><span class="op">(</span></span>
-<span>  study_id <span class="op">=</span> <span class="st">"ABC123"</span>,</span>
-<span>  environment <span class="op">=</span> <span class="st">"DEV"</span>,</span>
-<span>  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"user"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">ctx</span><span class="op">$</span><span class="va">run_id</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="ingest-validation-results-example">Ingest validation results (example)<a class="anchor" aria-label="anchor" href="#ingest-validation-results-example"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"p21_report.csv"</span><span class="op">)</span></span>
+<span><span class="co"># Create a run context</span></span>
+<span><span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/r4sub_run_context.html">r4sub_run_context</a></span><span class="op">(</span>study_id <span class="op">=</span> <span class="st">"ABC123"</span>, environment <span class="op">=</span> <span class="st">"DEV"</span><span class="op">)</span></span>
+<span><span class="va">ctx</span><span class="op">$</span><span class="va">run_id</span></span>
 <span></span>
-<span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/p21_to_evidence.html">p21_to_evidence</a></span><span class="op">(</span></span>
-<span>  <span class="va">raw</span>,</span>
-<span>  ctx <span class="op">=</span> <span class="va">ctx</span>,</span>
-<span>  asset_type <span class="op">=</span> <span class="st">"validation"</span>,</span>
-<span>  source_version <span class="op">=</span> <span class="st">"P21-3.0"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># Coerce raw data into the evidence schema</span></span>
+<span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_evidence.html">as_evidence</a></span><span class="op">(</span><span class="va">raw_df</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/validate_evidence.html">validate_evidence</a></span><span class="op">(</span><span class="va">ev</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/validate_evidence.html">validate_evidence</a></span><span class="op">(</span><span class="va">ev</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="summarize-evidence-quickly">Summarize evidence quickly<a class="anchor" aria-label="anchor" href="#summarize-evidence-quickly"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/evidence_summary.html">evidence_summary</a></span><span class="op">(</span><span class="va">ev</span><span class="op">)</span></span></code></pre></div>
-<hr>
+<span><span class="co"># Summarize</span></span>
+<span><span class="fu"><a href="reference/evidence_summary.html">evidence_summary</a></span><span class="op">(</span><span class="va">ev</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="architecture">Architecture<a class="anchor" aria-label="anchor" href="#architecture"></a>
+<h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
 </h2>
-<div class="section level3">
-<h3 id="main-modules">Main modules<a class="anchor" aria-label="anchor" href="#main-modules"></a>
-</h3>
-<ul>
-<li>
-<code>R/evidence_schema.R</code> – schema + validators</li>
-<li>
-<code>R/run_context.R</code> – run metadata</li>
-<li>
-<code>R/parsers_p21.R</code> – Pinnacle21 ingestion (first parser)</li>
-<li>
-<code>R/indicators.R</code> – indicator metadata + registry</li>
-<li>
-<code>R/scoring_primitives.R</code> – severity mapping, normalization, aggregation</li>
-<li>
-<code>R/utils_ids.R</code> – ID helpers, hashing</li>
-<li>
-<code>R/utils_json.R</code> – JSON payload helpers</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="extensibility">Extensibility<a class="anchor" aria-label="anchor" href="#extensibility"></a>
-</h3>
-<ul>
-<li>New parsers should output evidence via <code><a href="reference/as_evidence.html">as_evidence()</a></code>
-</li>
-<li>New indicators should register IDs and domain metadata</li>
-<li>Consumers should never depend on tool-specific raw formats</li>
-</ul>
-<hr>
-</div>
+<table class="table">
+<thead><tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="reference/r4sub_run_context.html">r4sub_run_context()</a></code></td>
+<td>Create a reproducible run context</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/as_evidence.html">as_evidence()</a></code></td>
+<td>Coerce a data frame to the evidence schema</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/validate_evidence.html">validate_evidence()</a></code></td>
+<td>Enforce schema contract</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/bind_evidence.html">bind_evidence()</a></code></td>
+<td>Safely combine evidence from multiple sources</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/evidence_summary.html">evidence_summary()</a></code></td>
+<td>Pass/warn/fail counts by domain</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/p21_to_evidence.html">p21_to_evidence()</a></code></td>
+<td>Ingest Pinnacle 21 CSV output</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/define_xml_to_evidence.html">define_xml_to_evidence()</a></code></td>
+<td>Ingest Define-XML metadata</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
-<h2 id="design-principles">Design principles<a class="anchor" aria-label="anchor" href="#design-principles"></a>
+<h2 id="design-principles">Design Principles<a class="anchor" aria-label="anchor" href="#design-principles"></a>
 </h2>
 <ul>
 <li>
@@ -380,55 +252,23 @@
 <li>
 <strong>Transparent scoring:</strong> no black-box weights; everything configurable</li>
 <li>
-<strong>Tool-agnostic:</strong> support P21 now, but leave room for OpenCDISC, internal engines</li>
+<strong>Tool-agnostic:</strong> supports P21, Define-XML, and extensible to other sources</li>
 <li>
-<strong>Reproducible:</strong> run_id + source_version captured everywhere</li>
+<strong>Reproducible:</strong> <code>run_id</code> + <code>source_version</code> captured everywhere</li>
 <li>
 <strong>Composable:</strong> small functions, no tight coupling</li>
 </ul>
-<hr>
 </div>
 <div class="section level2">
-<h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
+<h2 id="package-scope">Package Scope<a class="anchor" aria-label="anchor" href="#package-scope"></a>
 </h2>
-<div class="section level3">
-<h3 id="v01">v0.1<a class="anchor" aria-label="anchor" href="#v01"></a>
-</h3>
-<ul>
-<li>Evidence schema + validator</li>
-<li>Run context</li>
-<li>P21-style parser (CSV/XLSX minimal)</li>
-<li>Indicator metadata helpers</li>
-<li>Severity -&gt; numeric mappings</li>
-<li>Minimal summarizers</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="v02">v0.2<a class="anchor" aria-label="anchor" href="#v02"></a>
-</h3>
-<ul>
-<li>define.xml ingestion (structure-level metadata)</li>
-<li>Arrow/parquet IO</li>
-<li>Evidence “joins” (dataset &lt;-&gt; variable &lt;-&gt; rule)</li>
-<li>Config profiles (e.g., <code>FDA_ADaM_basic</code>, <code>EMA_SDTM_basic</code>)</li>
-</ul>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
-</h2>
-<ul>
-<li>Use <code>devtools::check()</code> before PR</li>
-<li>Add tests for each parser and scoring function</li>
-<li>Do not break evidence schema without a version bump + migration note</li>
-</ul>
-<hr>
+<p><strong>In scope:</strong> evidence schema, parsers, indicator interfaces, scoring primitives, run context.</p>
+<p><strong>Out of scope:</strong> full SCI calculation (<code>r4subscore</code>), dashboards (<code>r4subui</code>), traceability logic (<code>r4subtrace</code>), risk quantification (<code>r4subrisk</code>), usability indicators (<code>r4subusability</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>MIT – see <a href="LICENSE">LICENSE</a> file.</p>
+<p>MIT</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -464,7 +304,15 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=r4subcore" class="external-link"><img src="https://www.r-pkg.org/badges/version/r4subcore" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=r4subcore" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/r4subcore" alt="CRAN downloads"></a></li>
+<li><a href="https://r4sub.r-universe.dev/r4subcore" class="external-link"><img src="https://r4sub.r-universe.dev/badges/r4subcore" alt="r-universe"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

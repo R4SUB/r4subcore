@@ -1,271 +1,103 @@
 # r4subcore
 
-[![R-CMD-check](https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R4SUB/r4subcore/actions/workflows/R-CMD-check.yaml)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/r4subcore)](https://CRAN.R-project.org/package=r4subcore)
-[![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/r4subcore)](https://CRAN.R-project.org/package=r4subcore)
-[![r-universe](https://r4sub.r-universe.dev/badges/r4subcore)](https://r4sub.r-universe.dev/r4subcore)
-
 **r4subcore** is the foundational package in the **R4SUB** ecosystem. It
 defines the **core data contracts, parsers, evidence schema, and scoring
-primitives** needed to quantify *clinical submission readiness*.
+primitives** needed to quantify clinical submission readiness.
 
-It is intentionally “boring and stable”: other R4SUB packages (e.g.,
-`r4subtrace`, `r4subrisk`, `r4subscore`) build on these structures and
-interfaces.
-
-------------------------------------------------------------------------
-
-## Why r4subcore?
-
-Clinical submission readiness is rarely a single tool output. It’s an
-**evidence graph** across:
-
-- SDTM/ADaM datasets and metadata
-- Define.xml / ARM / reviewer guides
-- Validation results (Pinnacle21, OpenCDISC, internal rule engines)
-- Traceability / derivations (ADaM spec \<-\> code \<-\> outputs)
-- Usability / reviewer experience signals
-
-**r4subcore** provides: 1. A standardized **Evidence Table** schema 2.
-Common **parsers** to ingest heterogeneous sources 3. A consistent
-**indicator / signal** abstraction 4. **Scoring primitives** (normalize,
-weight, calibrate, aggregate) 5. A reproducible **run context** (run_id,
-dataset_id, study_id, tool version)
-
-------------------------------------------------------------------------
-
-## Package scope
-
-### In scope
-
-- Evidence schema + validation
-- Parsers for common sources (initial focus on P21-style outputs +
-  define.xml scaffolding)
-- Common utilities: ID generation, severity mapping, controlled
-  terminology mapping, standard columns
-- Indicator interfaces (how other packages implement signals)
-- Transparent scoring components (no hidden “magic”)
-
-### Out of scope
-
-- Full SCI (Submission Confidence Index) calculation (belongs in
-  `r4subscore`)
-- End-to-end dashboards / Shiny apps (belongs in `r4subui`)
-- Full traceability logic (belongs in `r4subtrace`)
-- Domain-specific oncology rules (belongs in extension packages)
-
-------------------------------------------------------------------------
+It is intentionally stable: other R4SUB packages (`r4subtrace`,
+`r4subrisk`, `r4subscore`, `r4subusability`) build on these structures
+and interfaces.
 
 ## Installation
-
-### CRAN
 
 ``` r
 install.packages("r4subcore")
 ```
 
-### Development install
+Development version:
 
 ``` r
-# install.packages("pak")
 pak::pak("R4SUB/r4subcore")
 ```
 
-### Requirements
+## Core Concepts
 
-- R \>= 4.2
-- Suggested: `arrow`, `xml2`, `dplyr`, `readr`, `jsonlite`, `cli`
+### Evidence Table
 
-------------------------------------------------------------------------
-
-## Core concepts
-
-### 1) Evidence Table (the heart of R4SUB)
-
-All inputs are normalized into a single tabular contract: an
+All inputs are normalized into a single tabular contract — an
 **evidence** dataset. This enables scoring, drilldown, traceability, and
 reporting.
 
-**Minimum columns (v0.1):**
+| Column             | Type    | Description                                                   |
+|--------------------|---------|---------------------------------------------------------------|
+| `run_id`           | chr     | Unique ID for a run                                           |
+| `study_id`         | chr     | Study identifier                                              |
+| `asset_type`       | chr     | `dataset`, `define`, `program`, `validation`, `spec`, `other` |
+| `asset_id`         | chr     | Asset identifier (e.g. `ADSL`, `define.xml`)                  |
+| `source_name`      | chr     | Tool or source name (e.g. `pinnacle21`)                       |
+| `source_version`   | chr     | Tool version                                                  |
+| `indicator_id`     | chr     | Signal definition identifier                                  |
+| `indicator_name`   | chr     | Human-readable indicator name                                 |
+| `indicator_domain` | chr     | `quality`, `trace`, `risk`, `usability`                       |
+| `severity`         | chr     | `info`, `low`, `medium`, `high`, `critical`                   |
+| `result`           | chr     | `pass`, `fail`, `warn`, `na`                                  |
+| `metric_value`     | dbl     | Numeric value (if applicable)                                 |
+| `metric_unit`      | chr     | Unit for metric                                               |
+| `message`          | chr     | Short description                                             |
+| `location`         | chr     | Pointer (dataset / variable / rule)                           |
+| `evidence_payload` | json    | Raw structured payload                                        |
+| `created_at`       | POSIXct | Ingestion timestamp                                           |
 
-| column             | type    | meaning                                                    |
-|--------------------|---------|------------------------------------------------------------|
-| `run_id`           | chr     | unique ID for a run                                        |
-| `study_id`         | chr     | study identifier                                           |
-| `asset_type`       | chr     | `dataset`, `define`, `program`, `validation`, `spec`, etc. |
-| `asset_id`         | chr     | unique ID of the asset (e.g., `ADSL`, `define.xml`)        |
-| `source_name`      | chr     | tool/source name (e.g., `pinnacle21`)                      |
-| `source_version`   | chr     | tool version                                               |
-| `indicator_id`     | chr     | the signal definition identifier                           |
-| `indicator_name`   | chr     | human name                                                 |
-| `indicator_domain` | chr     | `quality`, `trace`, `risk`, `usability`                    |
-| `severity`         | chr     | `info`, `low`, `medium`, `high`, `critical`                |
-| `result`           | chr     | `pass`, `fail`, `warn`, `na`                               |
-| `metric_value`     | dbl     | numeric value (if applicable)                              |
-| `metric_unit`      | chr     | unit for metric                                            |
-| `message`          | chr     | short description                                          |
-| `location`         | chr     | pointer (dataset/variable/rule line)                       |
-| `evidence_payload` | json    | raw structured payload                                     |
-| `created_at`       | POSIXct | ingestion timestamp                                        |
-
-**Guarantees:**
-
-- Each row is a single unit of evidence
-- Evidence is immutable (append-only semantics recommended)
-- Score consumers can rely on consistent meaning
-
-Use:
-
-- [`as_evidence()`](https://r4sub.github.io/r4subcore/reference/as_evidence.md)
-  to coerce raw data
-- [`validate_evidence()`](https://r4sub.github.io/r4subcore/reference/validate_evidence.md)
-  to enforce contract
-- [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md)
-  to combine sources safely
-
-------------------------------------------------------------------------
-
-### 2) Indicators (signals)
-
-An **indicator** is a definition of *what to measure*, not necessarily
-how to calculate it.
-
-Indicators have:
-
-- `indicator_id` (stable)
-- `domain` (quality/trace/risk/usability)
-- `description`
-- `expected_inputs` (evidence sources required)
-- `default_thresholds`
-- optional `tags` (e.g., `define`, `adam`, `sdtm`, `spec`)
-
-`r4subcore` provides:
-
-- indicator registry helpers (local registry first, remote later)
-- validation to ensure indicator metadata is well-formed
-
-Other packages implement the actual calculations and output evidence
-rows using these IDs.
-
-------------------------------------------------------------------------
-
-### 3) Scoring primitives (transparent & composable)
-
-`r4subcore` includes **small, auditable** functions for:
-
-- mapping severity -\> numeric penalty
-- normalizing metrics to 0-1
-- applying weights
-- aggregating evidence into indicator scores
-
-SCI itself is not in this package.
-
-------------------------------------------------------------------------
-
-## Quick start
-
-### Create a run context
+### Quick Start
 
 ``` r
 library(r4subcore)
 
-ctx <- r4sub_run_context(
-  study_id = "ABC123",
-  environment = "DEV",
-  user = Sys.info()[["user"]]
-)
+# Create a run context
+ctx <- r4sub_run_context(study_id = "ABC123", environment = "DEV")
 ctx$run_id
-```
 
-### Ingest validation results (example)
-
-``` r
-raw <- read.csv("p21_report.csv")
-
-ev <- p21_to_evidence(
-  raw,
-  ctx = ctx,
-  asset_type = "validation",
-  source_version = "P21-3.0"
-)
-
+# Coerce raw data into the evidence schema
+ev <- as_evidence(raw_df)
 validate_evidence(ev)
-```
 
-### Summarize evidence quickly
-
-``` r
+# Summarize
 evidence_summary(ev)
 ```
 
-------------------------------------------------------------------------
+## Key Functions
 
-## Architecture
+| Function                                                                                            | Purpose                                       |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| [`r4sub_run_context()`](https://r4sub.github.io/r4subcore/reference/r4sub_run_context.md)           | Create a reproducible run context             |
+| [`as_evidence()`](https://r4sub.github.io/r4subcore/reference/as_evidence.md)                       | Coerce a data frame to the evidence schema    |
+| [`validate_evidence()`](https://r4sub.github.io/r4subcore/reference/validate_evidence.md)           | Enforce schema contract                       |
+| [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md)                   | Safely combine evidence from multiple sources |
+| [`evidence_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_summary.md)             | Pass/warn/fail counts by domain               |
+| [`p21_to_evidence()`](https://r4sub.github.io/r4subcore/reference/p21_to_evidence.md)               | Ingest Pinnacle 21 CSV output                 |
+| [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md) | Ingest Define-XML metadata                    |
 
-### Main modules
-
-- `R/evidence_schema.R` – schema + validators
-- `R/run_context.R` – run metadata
-- `R/parsers_p21.R` – Pinnacle21 ingestion (first parser)
-- `R/indicators.R` – indicator metadata + registry
-- `R/scoring_primitives.R` – severity mapping, normalization,
-  aggregation
-- `R/utils_ids.R` – ID helpers, hashing
-- `R/utils_json.R` – JSON payload helpers
-
-### Extensibility
-
-- New parsers should output evidence via
-  [`as_evidence()`](https://r4sub.github.io/r4subcore/reference/as_evidence.md)
-- New indicators should register IDs and domain metadata
-- Consumers should never depend on tool-specific raw formats
-
-------------------------------------------------------------------------
-
-## Design principles
+## Design Principles
 
 - **Contract-first:** normalize everything into evidence rows
 - **Transparent scoring:** no black-box weights; everything configurable
-- **Tool-agnostic:** support P21 now, but leave room for OpenCDISC,
-  internal engines
-- **Reproducible:** run_id + source_version captured everywhere
+- **Tool-agnostic:** supports P21, Define-XML, and extensible to other
+  sources
+- **Reproducible:** `run_id` + `source_version` captured everywhere
 - **Composable:** small functions, no tight coupling
 
-------------------------------------------------------------------------
+## Package Scope
 
-## Roadmap
+**In scope:** evidence schema, parsers, indicator interfaces, scoring
+primitives, run context.
 
-### v0.1
-
-- Evidence schema + validator
-- Run context
-- P21-style parser (CSV/XLSX minimal)
-- Indicator metadata helpers
-- Severity -\> numeric mappings
-- Minimal summarizers
-
-### v0.2
-
-- define.xml ingestion (structure-level metadata)
-- Arrow/parquet IO
-- Evidence “joins” (dataset \<-\> variable \<-\> rule)
-- Config profiles (e.g., `FDA_ADaM_basic`, `EMA_SDTM_basic`)
-
-------------------------------------------------------------------------
-
-## Contributing
-
-- Use `devtools::check()` before PR
-- Add tests for each parser and scoring function
-- Do not break evidence schema without a version bump + migration note
-
-------------------------------------------------------------------------
+**Out of scope:** full SCI calculation (`r4subscore`), dashboards
+(`r4subui`), traceability logic (`r4subtrace`), risk quantification
+(`r4subrisk`), usability indicators (`r4subusability`).
 
 ## License
 
-MIT – see [LICENSE](https://r4sub.github.io/r4subcore/LICENSE) file.
+MIT
 
 # Package index
 

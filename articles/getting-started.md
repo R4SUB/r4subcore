@@ -28,14 +28,14 @@ traceability.
 
 ``` r
 ctx <- r4sub_run_context(study_id = "STUDY001", environment = "DEV")
-#> ℹ Run context created: "R4S-20260316101042-wl4dieex"
+#> ℹ Run context created: "R4S-20260316112310-wl4dieex"
 print(ctx)
 #> <r4sub_run_context>
-#>   run_id:       R4S-20260316101042-wl4dieex 
+#>   run_id:       R4S-20260316112310-wl4dieex 
 #>   study_id:     STUDY001 
 #>   environment:  DEV 
 #>   user:         runner 
-#>   created_at:   2026-03-16 10:10:42
+#>   created_at:   2026-03-16 11:23:10
 ```
 
 `run_id` is generated automatically from the timestamp, but you can
@@ -144,7 +144,7 @@ ncol(ev)
 #> [1] 17
 ev[, c("run_id", "study_id", "indicator_id", "result", "severity")]
 #>                        run_id study_id indicator_id result severity
-#> 1 R4S-20260316101042-wl4dieex STUDY001   P21-SD0001   fail     high
+#> 1 R4S-20260316112310-wl4dieex STUDY001   P21-SD0001   fail     high
 ```
 
 ## Validating Evidence

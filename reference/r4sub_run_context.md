@@ -47,9 +47,9 @@ A list of class `r4sub_run_context` with elements: `run_id`, `study_id`,
 
 ``` r
 ctx <- r4sub_run_context(study_id = "STUDY001", environment = "DEV")
-#> ℹ Run context created: "R4S-20260316101040-qm66mr5e"
+#> ℹ Run context created: "R4S-20260316112308-qm66mr5e"
 ctx$run_id
-#> [1] "R4S-20260316101040-qm66mr5e"
+#> [1] "R4S-20260316112308-qm66mr5e"
 ctx$study_id
 #> [1] "STUDY001"
 ```
