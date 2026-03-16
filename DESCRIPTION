@@ -12,7 +12,7 @@ Description: Foundational package in the R4SUB (R for Regulatory Submission)
     sources (validation outputs, metadata, traceability) into a single
     evidence framework.
 License: MIT + file LICENSE
-URL: https://github.com/R4SUB/r4subcore
+URL: https://r4sub.github.io/r4subcore/, https://github.com/R4SUB/r4subcore
 BugReports: https://github.com/R4SUB/r4subcore/issues
 Depends:
     R (>= 4.2)

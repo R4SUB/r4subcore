@@ -1,0 +1,63 @@
+url: https://r4sub.github.io/r4subcore/
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    primary: "#2C6DB5"
+    navbar-light-brand-color: "#2C6DB5"
+    navbar-light-brand-hover-color: "#1a4a8a"
+
+navbar:
+  bg: light
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/R4SUB/r4subcore
+      aria-label: GitHub
+
+home:
+  title: "r4subcore — R4SUB Foundation Layer"
+  description: >
+    Foundation layer of the R4SUB ecosystem. Provides the run context,
+    evidence schema, validation, and export utilities used by all R4SUB packages.
+
+reference:
+  - title: "Run Context"
+    contents:
+      - r4sub_run_context
+  - title: "Evidence Schema"
+    contents:
+      - as_evidence
+      - validate_evidence
+      - bind_evidence
+      - evidence_summary
+      - evidence_schema
+  - title: "Evidence Export & Import"
+    contents:
+      - export_evidence
+      - import_evidence
+  - title: "Define-XML Parser"
+    contents:
+      - define_xml_to_evidence
+  - title: "Utilities"
+    contents:
+      - aggregate_indicator_score
+      - canon_result
+      - canon_severity
+      - hash_id
+      - json_safely
+      - normalize_01
+      - p21_to_evidence
+      - register_indicator
+      - result_to_score
+      - severity_to_weight
+      - validate_indicator
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
