@@ -4,9 +4,9 @@
 \name{r4subcore-package}
 \alias{r4subcore}
 \alias{r4subcore-package}
-\title{r4subcore: Core Data Contracts, Parsers, and Scoring Primitives for Clinical Submission Readiness}
+\title{r4subcore: Core Contracts, Parsers, and Scoring Primitives}
 \description{
-Foundational package in the R4SUB ecosystem. Defines the core evidence table schema, parsers, indicator abstractions, and scoring primitives needed to quantify clinical submission readiness. Provides a standardized contract for ingesting heterogeneous sources (validation outputs, metadata, traceability) into a single evidence framework.
+Foundational package in the R4SUB (R for Regulatory Submission) ecosystem. Defines the core evidence table schema, parsers, indicator abstractions, and scoring primitives needed to quantify clinical submission readiness. Provides a standardized contract for ingesting heterogeneous sources (validation outputs, metadata, traceability) into a single evidence framework.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Pawan Rama Mali \email{prm@outlook.in} [copyright holder]
+\strong{Maintainer}: Pawan Rama Mali \email{prm@outlook.in} (\href{https://orcid.org/0000-0001-7864-5819}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}
