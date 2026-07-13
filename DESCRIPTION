@@ -5,7 +5,7 @@ Authors@R:
     person("Pawan Rama", "Mali", email = "prm@outlook.in",
            role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7864-5819"))
-Description: Foundational package in the R4SUB (R for Regulatory Submission)
+Description: Foundational package in the R4SUB (Ready for Submission)
     ecosystem. Defines the core evidence table schema, parsers, indicator
     abstractions, and scoring primitives needed to quantify clinical submission
     readiness. Provides a standardized contract for ingesting heterogeneous

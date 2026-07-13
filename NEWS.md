@@ -1,3 +1,9 @@
+# r4subcore (development version)
+
+- Clarified the package DESCRIPTION: "R4SUB" expands to "Ready for Submission"
+  (previously "R for Regulatory Submission", inconsistent with the rest of the
+  ecosystem).
+
 # r4subcore 0.1.2
 
 - `define_xml_to_evidence()`: Parse Define-XML 2.0/2.1 files into evidence,
