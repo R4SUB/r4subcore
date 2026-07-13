@@ -11,12 +11,14 @@ and interfaces.
 ## Installation
 
 ``` r
+
 install.packages("r4subcore")
 ```
 
 Development version:
 
 ``` r
+
 pak::pak("R4SUB/r4subcore")
 ```
 
@@ -28,29 +30,30 @@ All inputs are normalized into a single tabular contract — an
 **evidence** dataset. This enables scoring, drilldown, traceability, and
 reporting.
 
-| Column             | Type    | Description                                                   |
-|--------------------|---------|---------------------------------------------------------------|
-| `run_id`           | chr     | Unique ID for a run                                           |
-| `study_id`         | chr     | Study identifier                                              |
-| `asset_type`       | chr     | `dataset`, `define`, `program`, `validation`, `spec`, `other` |
-| `asset_id`         | chr     | Asset identifier (e.g. `ADSL`, `define.xml`)                  |
-| `source_name`      | chr     | Tool or source name (e.g. `pinnacle21`)                       |
-| `source_version`   | chr     | Tool version                                                  |
-| `indicator_id`     | chr     | Signal definition identifier                                  |
-| `indicator_name`   | chr     | Human-readable indicator name                                 |
-| `indicator_domain` | chr     | `quality`, `trace`, `risk`, `usability`                       |
-| `severity`         | chr     | `info`, `low`, `medium`, `high`, `critical`                   |
-| `result`           | chr     | `pass`, `fail`, `warn`, `na`                                  |
-| `metric_value`     | dbl     | Numeric value (if applicable)                                 |
-| `metric_unit`      | chr     | Unit for metric                                               |
-| `message`          | chr     | Short description                                             |
-| `location`         | chr     | Pointer (dataset / variable / rule)                           |
-| `evidence_payload` | json    | Raw structured payload                                        |
-| `created_at`       | POSIXct | Ingestion timestamp                                           |
+| Column | Type | Description |
+|----|----|----|
+| `run_id` | chr | Unique ID for a run |
+| `study_id` | chr | Study identifier |
+| `asset_type` | chr | `dataset`, `define`, `program`, `validation`, `spec`, `other` |
+| `asset_id` | chr | Asset identifier (e.g. `ADSL`, `define.xml`) |
+| `source_name` | chr | Tool or source name (e.g. `pinnacle21`) |
+| `source_version` | chr | Tool version |
+| `indicator_id` | chr | Signal definition identifier |
+| `indicator_name` | chr | Human-readable indicator name |
+| `indicator_domain` | chr | `quality`, `trace`, `risk`, `usability` |
+| `severity` | chr | `info`, `low`, `medium`, `high`, `critical` |
+| `result` | chr | `pass`, `fail`, `warn`, `na` |
+| `metric_value` | dbl | Numeric value (if applicable) |
+| `metric_unit` | chr | Unit for metric |
+| `message` | chr | Short description |
+| `location` | chr | Pointer (dataset / variable / rule) |
+| `evidence_payload` | json | Raw structured payload |
+| `created_at` | POSIXct | Ingestion timestamp |
 
 ### Quick Start
 
 ``` r
+
 library(r4subcore)
 
 # Create a run context
@@ -67,15 +70,15 @@ evidence_summary(ev)
 
 ## Key Functions
 
-| Function                                                                                            | Purpose                                       |
-|-----------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| [`r4sub_run_context()`](https://r4sub.github.io/r4subcore/reference/r4sub_run_context.md)           | Create a reproducible run context             |
-| [`as_evidence()`](https://r4sub.github.io/r4subcore/reference/as_evidence.md)                       | Coerce a data frame to the evidence schema    |
-| [`validate_evidence()`](https://r4sub.github.io/r4subcore/reference/validate_evidence.md)           | Enforce schema contract                       |
-| [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md)                   | Safely combine evidence from multiple sources |
-| [`evidence_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_summary.md)             | Pass/warn/fail counts by domain               |
-| [`p21_to_evidence()`](https://r4sub.github.io/r4subcore/reference/p21_to_evidence.md)               | Ingest Pinnacle 21 CSV output                 |
-| [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md) | Ingest Define-XML metadata                    |
+| Function | Purpose |
+|----|----|
+| [`r4sub_run_context()`](https://r4sub.github.io/r4subcore/reference/r4sub_run_context.md) | Create a reproducible run context |
+| [`as_evidence()`](https://r4sub.github.io/r4subcore/reference/as_evidence.md) | Coerce a data frame to the evidence schema |
+| [`validate_evidence()`](https://r4sub.github.io/r4subcore/reference/validate_evidence.md) | Enforce schema contract |
+| [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md) | Safely combine evidence from multiple sources |
+| [`evidence_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_summary.md) | Pass/warn/fail counts by domain |
+| [`p21_to_evidence()`](https://r4sub.github.io/r4subcore/reference/p21_to_evidence.md) | Ingest Pinnacle 21 CSV output |
+| [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md) | Ingest Define-XML metadata |
 
 ## Design Principles
 

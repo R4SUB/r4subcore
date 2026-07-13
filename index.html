@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>r4subcore — R4SUB Foundation Layer • r4subcore</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="r4subcore — R4SUB Foundation Layer">
 <meta name="description" content="Foundation layer of the R4SUB ecosystem. Provides the run context, evidence schema, validation, and export utilities used by all R4SUB packages.
@@ -83,101 +83,101 @@
 <col width="33%">
 <col width="33%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Column</th>
 <th>Type</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>run_id</code></td>
 <td>chr</td>
 <td>Unique ID for a run</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>study_id</code></td>
 <td>chr</td>
 <td>Study identifier</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>asset_type</code></td>
 <td>chr</td>
 <td>
 <code>dataset</code>, <code>define</code>, <code>program</code>, <code>validation</code>, <code>spec</code>, <code>other</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>asset_id</code></td>
 <td>chr</td>
 <td>Asset identifier (e.g. <code>ADSL</code>, <code>define.xml</code>)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>source_name</code></td>
 <td>chr</td>
 <td>Tool or source name (e.g. <code>pinnacle21</code>)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>source_version</code></td>
 <td>chr</td>
 <td>Tool version</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>indicator_id</code></td>
 <td>chr</td>
 <td>Signal definition identifier</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>indicator_name</code></td>
 <td>chr</td>
 <td>Human-readable indicator name</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>indicator_domain</code></td>
 <td>chr</td>
 <td>
 <code>quality</code>, <code>trace</code>, <code>risk</code>, <code>usability</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>severity</code></td>
 <td>chr</td>
 <td>
 <code>info</code>, <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>result</code></td>
 <td>chr</td>
 <td>
 <code>pass</code>, <code>fail</code>, <code>warn</code>, <code>na</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>metric_value</code></td>
 <td>dbl</td>
 <td>Numeric value (if applicable)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>metric_unit</code></td>
 <td>chr</td>
 <td>Unit for metric</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>message</code></td>
 <td>chr</td>
 <td>Short description</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>location</code></td>
 <td>chr</td>
 <td>Pointer (dataset / variable / rule)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>evidence_payload</code></td>
 <td>json</td>
 <td>Raw structured payload</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>created_at</code></td>
 <td>POSIXct</td>
 <td>Ingestion timestamp</td>
@@ -207,36 +207,36 @@
 <h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
 </h2>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Function</th>
 <th>Purpose</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/r4sub_run_context.html">r4sub_run_context()</a></code></td>
 <td>Create a reproducible run context</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/as_evidence.html">as_evidence()</a></code></td>
 <td>Coerce a data frame to the evidence schema</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/validate_evidence.html">validate_evidence()</a></code></td>
 <td>Enforce schema contract</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/bind_evidence.html">bind_evidence()</a></code></td>
 <td>Safely combine evidence from multiple sources</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/evidence_summary.html">evidence_summary()</a></code></td>
 <td>Pass/warn/fail counts by domain</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/p21_to_evidence.html">p21_to_evidence()</a></code></td>
 <td>Ingest Pinnacle 21 CSV output</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/define_xml_to_evidence.html">define_xml_to_evidence()</a></code></td>
 <td>Ingest Define-XML metadata</td>
 </tr>
@@ -323,7 +323,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

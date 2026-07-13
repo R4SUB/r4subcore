@@ -1,6 +1,7 @@
 # Getting Started with r4subcore
 
 ``` r
+
 library(r4subcore)
 ```
 
@@ -27,21 +28,23 @@ stamped with the `run_id` and `study_id` from its context, ensuring full
 traceability.
 
 ``` r
+
 ctx <- r4sub_run_context(study_id = "STUDY001", environment = "DEV")
-#> ℹ Run context created: "R4S-20260316112310-wl4dieex"
+#> ℹ Run context created: "R4S-20260713150125-wl4dieex"
 print(ctx)
 #> <r4sub_run_context>
-#>   run_id:       R4S-20260316112310-wl4dieex 
+#>   run_id:       R4S-20260713150125-wl4dieex 
 #>   study_id:     STUDY001 
 #>   environment:  DEV 
 #>   user:         runner 
-#>   created_at:   2026-03-16 11:23:10
+#>   created_at:   2026-07-13 15:01:25
 ```
 
 `run_id` is generated automatically from the timestamp, but you can
 supply your own if you need reproducibility in tests or pipelines.
 
 ``` r
+
 ctx_custom <- r4sub_run_context(
   study_id    = "STUDY001",
   environment = "PROD",
@@ -60,6 +63,7 @@ must contain. Call
 to inspect the contract at any time:
 
 ``` r
+
 schema <- evidence_schema()
 # Column names in canonical order
 names(schema)
@@ -70,25 +74,25 @@ names(schema)
 #> [17] "created_at"
 ```
 
-| Column             | Type      | Required | Notes                                                     |
-|--------------------|-----------|----------|-----------------------------------------------------------|
-| `run_id`           | character | yes      | Set from run context                                      |
-| `study_id`         | character | yes      | Set from run context                                      |
-| `asset_type`       | character | yes      | One of: dataset, define, program, validation, spec, other |
-| `asset_id`         | character | yes      | e.g. “ADSL”, “define.xml”                                 |
-| `source_name`      | character | yes      | Tool or package that produced the finding                 |
-| `source_version`   | character | nullable | Version of the source tool                                |
-| `indicator_id`     | character | yes      | e.g. “P21-001”, “U-001”                                   |
-| `indicator_name`   | character | yes      | Human-readable indicator name                             |
-| `indicator_domain` | character | yes      | One of: quality, trace, risk, usability                   |
-| `severity`         | character | yes      | One of: info, low, medium, high, critical                 |
-| `result`           | character | yes      | One of: pass, fail, warn, na                              |
-| `metric_value`     | double    | nullable | Numeric score (0–1 scale typical)                         |
-| `metric_unit`      | character | nullable | e.g. “score”, “proportion”, “count”                       |
-| `message`          | character | nullable | Human-readable finding description                        |
-| `location`         | character | nullable | e.g. “ADSL.USUBJID”                                       |
-| `evidence_payload` | character | nullable | JSON string for extended detail                           |
-| `created_at`       | POSIXct   | yes      | Set automatically if omitted                              |
+| Column | Type | Required | Notes |
+|----|----|----|----|
+| `run_id` | character | yes | Set from run context |
+| `study_id` | character | yes | Set from run context |
+| `asset_type` | character | yes | One of: dataset, define, program, validation, spec, other |
+| `asset_id` | character | yes | e.g. “ADSL”, “define.xml” |
+| `source_name` | character | yes | Tool or package that produced the finding |
+| `source_version` | character | nullable | Version of the source tool |
+| `indicator_id` | character | yes | e.g. “P21-001”, “U-001” |
+| `indicator_name` | character | yes | Human-readable indicator name |
+| `indicator_domain` | character | yes | One of: quality, trace, risk, usability |
+| `severity` | character | yes | One of: info, low, medium, high, critical |
+| `result` | character | yes | One of: pass, fail, warn, na |
+| `metric_value` | double | nullable | Numeric score (0–1 scale typical) |
+| `metric_unit` | character | nullable | e.g. “score”, “proportion”, “count” |
+| `message` | character | nullable | Human-readable finding description |
+| `location` | character | nullable | e.g. “ADSL.USUBJID” |
+| `evidence_payload` | character | nullable | JSON string for extended detail |
+| `created_at` | POSIXct | yes | Set automatically if omitted |
 
 ### Controlled vocabulary helpers
 
@@ -98,6 +102,7 @@ and
 normalise common aliases to the canonical values accepted by the schema:
 
 ``` r
+
 canon_severity(c("ERROR", "warning", "Minor", "CRITICAL"))
 #> [1] "high"     "medium"   "low"      "critical"
 canon_result(c("PASS", "Failed", "Warning", "N/A"))
@@ -116,6 +121,7 @@ minimum the required columns, pass a run context, and the function:
 - validates the result before returning it.
 
 ``` r
+
 raw <- data.frame(
   asset_type       = "validation",
   asset_id         = "ADSL",
@@ -139,12 +145,13 @@ ev <- as_evidence(raw, ctx = ctx)
 You can inspect the resulting evidence table:
 
 ``` r
+
 # All 17 schema columns are present
 ncol(ev)
 #> [1] 17
 ev[, c("run_id", "study_id", "indicator_id", "result", "severity")]
 #>                        run_id study_id indicator_id result severity
-#> 1 R4S-20260316112310-wl4dieex STUDY001   P21-SD0001   fail     high
+#> 1 R4S-20260713150125-wl4dieex STUDY001   P21-SD0001   fail     high
 ```
 
 ## Validating Evidence
@@ -156,6 +163,7 @@ calls internally. Use it when you receive evidence produced externally
 and want to confirm it meets the contract before processing:
 
 ``` r
+
 validate_evidence(ev)  # returns TRUE invisibly if everything is valid
 ```
 
@@ -167,6 +175,7 @@ It validates each table individually before combining, preventing schema
 violations from silently propagating:
 
 ``` r
+
 # A second finding — a passed check on the same dataset
 raw2 <- data.frame(
   asset_type       = "dataset",
@@ -198,6 +207,7 @@ aggregates an evidence table by domain, severity, result, and source,
 giving a one-page digest of the findings:
 
 ``` r
+
 evidence_summary(combined)
 #>   indicator_domain severity result source_name n
 #> 1          quality     high   fail  pinnacle21 1
@@ -212,6 +222,7 @@ format. The exported file retains the full schema so
 can re-validate it on the way back in.
 
 ``` r
+
 # Export to CSV
 tmp <- tempfile(fileext = ".csv")
 export_evidence(combined, file = tmp, format = "csv")

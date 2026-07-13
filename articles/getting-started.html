@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Getting Started with r4subcore • r4subcore</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with r4subcore">
 </head>
@@ -97,14 +97,14 @@ create is stamped with the <code>run_id</code> and <code>study_id</code>
 from its context, ensuring full traceability.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/r4sub_run_context.html">r4sub_run_context</a></span><span class="op">(</span>study_id <span class="op">=</span> <span class="st">"STUDY001"</span>, environment <span class="op">=</span> <span class="st">"DEV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run context created: <span style="color: #0000BB;">"R4S-20260316112310-wl4dieex"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run context created: <span style="color: #0000BB;">"R4S-20260713150125-wl4dieex"</span></span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ctx</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;r4sub_run_context&gt;</span></span>
-<span><span class="co">#&gt;   run_id:       R4S-20260316112310-wl4dieex </span></span>
+<span><span class="co">#&gt;   run_id:       R4S-20260713150125-wl4dieex </span></span>
 <span><span class="co">#&gt;   study_id:     STUDY001 </span></span>
 <span><span class="co">#&gt;   environment:  DEV </span></span>
 <span><span class="co">#&gt;   user:         runner </span></span>
-<span><span class="co">#&gt;   created_at:   2026-03-16 11:23:10</span></span></code></pre></div>
+<span><span class="co">#&gt;   created_at:   2026-07-13 15:01:25</span></span></code></pre></div>
 <p><code>run_id</code> is generated automatically from the timestamp,
 but you can supply your own if you need reproducibility in tests or
 pipelines.</p>
@@ -304,7 +304,7 @@ context,</li>
 <span><span class="co">#&gt; [1] 17</span></span>
 <span><span class="va">ev</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"run_id"</span>, <span class="st">"study_id"</span>, <span class="st">"indicator_id"</span>, <span class="st">"result"</span>, <span class="st">"severity"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;                        run_id study_id indicator_id result severity</span></span>
-<span><span class="co">#&gt; 1 R4S-20260316112310-wl4dieex STUDY001   P21-SD0001   fail     high</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 R4S-20260713150125-wl4dieex STUDY001   P21-SD0001   fail     high</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validating-evidence">Validating Evidence<a class="anchor" aria-label="anchor" href="#validating-evidence"></a>
@@ -408,7 +408,7 @@ to submission requirements.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
