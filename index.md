@@ -26,7 +26,7 @@ pak::pak("R4SUB/r4subcore")
 
 ### Evidence Table
 
-All inputs are normalized into a single tabular contract — an
+All inputs are normalized into a single tabular contract, an
 **evidence** dataset. This enables scoring, drilldown, traceability, and
 reporting.
 
