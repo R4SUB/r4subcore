@@ -1,5 +1,13 @@
 # r4subcore (development version)
 
+- Add `adrg_to_evidence()` and `adrg_sections()` for Analysis Data Reviewer's
+  Guide coverage. Given a structured summary of which standard ADRG sections a
+  guide contains, this emits usability evidence: missing required sections fail,
+  missing recommended sections warn. The same machinery covers the SDRG via
+  `source_name`.
+- Add `evidence_sources()`, a reference table of supported and planned evidence
+  sources with their format, pillar, and entry point.
+
 - Clarified the package DESCRIPTION: "R4SUB" expands to "Ready for Submission"
   (previously "R for Regulatory Submission", inconsistent with the rest of the
   ecosystem).
