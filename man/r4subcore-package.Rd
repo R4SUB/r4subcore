@@ -6,11 +6,12 @@
 \alias{r4subcore-package}
 \title{r4subcore: Core Contracts, Parsers, and Scoring Primitives}
 \description{
-Foundational package in the R4SUB (R for Regulatory Submission) ecosystem. Defines the core evidence table schema, parsers, indicator abstractions, and scoring primitives needed to quantify clinical submission readiness. Provides a standardized contract for ingesting heterogeneous sources (validation outputs, metadata, traceability) into a single evidence framework.
+Foundational package in the R4SUB (Ready for Submission) ecosystem. Defines the core evidence table schema, parsers, indicator abstractions, and scoring primitives needed to quantify clinical submission readiness. Provides a standardized contract for ingesting heterogeneous sources (validation outputs, metadata, traceability) into a single evidence framework.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://r4sub.github.io/r4subcore/}
   \item \url{https://github.com/R4SUB/r4subcore}
   \item Report bugs at \url{https://github.com/R4SUB/r4subcore/issues}
 }

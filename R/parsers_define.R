@@ -55,8 +55,8 @@
 #' nrow(ev)
 #' }
 #'
-#' @importFrom xml2 read_xml xml_find_all xml_attr xml_text xml_ns_strip
-#' @importFrom cli cli_alert_info cli_alert_warning
+#' @importFrom xml2 read_xml xml_find_all xml_attr xml_text
+#' @importFrom cli cli_alert_info cli_alert_warning cli_warn
 #' @export
 define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
   stopifnot(
@@ -66,16 +66,19 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
   )
 
   doc <- xml2::read_xml(file)
-  # Strip all namespaces for simpler xpath queries
-  xml2::xml_ns_strip(doc)
+
+  # Match elements by local name so the parser is agnostic to how a file mixes
+  # the ODM default namespace and the def: extension namespace. Real Define-XML
+  # files vary here, and a plain "//ItemGroupDef" query silently misses
+  # namespace-prefixed elements.
 
   # ---- 1. Extract ItemGroupDef (datasets) ----
-  item_groups <- xml2::xml_find_all(doc, "//ItemGroupDef")
+  item_groups <- xml2::xml_find_all(doc, "//*[local-name()='ItemGroupDef']")
   n_groups <- length(item_groups)
   cli::cli_alert_info("Define-XML: found {n_groups} dataset(s) (ItemGroupDef)")
 
   # ---- 2. Extract ItemDef (variables) ----
-  item_defs <- xml2::xml_find_all(doc, "//ItemDef")
+  item_defs <- xml2::xml_find_all(doc, "//*[local-name()='ItemDef']")
   n_items <- length(item_defs)
   cli::cli_alert_info("Define-XML: found {n_items} variable definition(s) (ItemDef)")
 
@@ -91,7 +94,7 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
     }
     # Fall back: look for a child Label element
     if (is.na(ds_label) || !nzchar(ds_label)) {
-      label_node <- xml2::xml_find_all(ig, ".//Description/TranslatedText")
+      label_node <- xml2::xml_find_all(ig, ".//*[local-name()='Description']/*[local-name()='TranslatedText']")
       if (length(label_node) > 0) {
         ds_label <- xml2::xml_text(label_node[[1]])
       }
@@ -159,7 +162,7 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
   oid_to_ds <- list()
   for (ig in item_groups) {
     ds_name  <- xml2::xml_attr(ig, "Name")
-    item_refs <- xml2::xml_find_all(ig, ".//ItemRef")
+    item_refs <- xml2::xml_find_all(ig, ".//*[local-name()='ItemRef']")
     for (ir in item_refs) {
       item_oid <- xml2::xml_attr(ir, "ItemOID")
       if (!is.na(item_oid)) {
@@ -174,7 +177,7 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
     data_type <- xml2::xml_attr(id_node, "DataType")
 
     # Label from Description/TranslatedText child
-    label_nodes <- xml2::xml_find_all(id_node, ".//Description/TranslatedText")
+    label_nodes <- xml2::xml_find_all(id_node, ".//*[local-name()='Description']/*[local-name()='TranslatedText']")
     var_label <- if (length(label_nodes) > 0) xml2::xml_text(label_nodes[[1]]) else NA_character_
 
     ds_name <- if (!is.null(oid) && !is.na(oid) && !is.null(oid_to_ds[[oid]])) {
@@ -226,6 +229,31 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
     )
   }
 
+  # ItemRef MethodOID lookup and MethodDef descriptions. Define-XML 2.1 often
+  # stores a derivation in a MethodDef referenced from ItemRef, not inline in
+  # Origin, so resolve both.
+  oid_to_method <- list()
+  for (ig in item_groups) {
+    for (ir in xml2::xml_find_all(ig, ".//*[local-name()='ItemRef']")) {
+      item_oid   <- xml2::xml_attr(ir, "ItemOID")
+      ref_method <- xml2::xml_attr(ir, "MethodOID")
+      if (!is.na(item_oid) && !is.na(ref_method) && nzchar(ref_method)) {
+        oid_to_method[[item_oid]] <- ref_method
+      }
+    }
+  }
+  method_desc <- list()
+  for (md in xml2::xml_find_all(doc, "//*[local-name()='MethodDef']")) {
+    md_oid <- xml2::xml_attr(md, "OID")
+    if (is.na(md_oid)) next
+    desc_nodes <- xml2::xml_find_all(md, ".//*[local-name()='Description']/*[local-name()='TranslatedText']")
+    method_desc[[md_oid]] <- if (length(desc_nodes) > 0L) {
+      xml2::xml_text(desc_nodes[[1]])
+    } else {
+      NA_character_
+    }
+  }
+
   # ---- Q-DEFINE-003: derivation text present for derived variables ----
   for (id_node in item_defs) {
     oid      <- xml2::xml_attr(id_node, "OID")
@@ -236,62 +264,81 @@ define_xml_to_evidence <- function(file, ctx, source_version = "2.1") {
       "define.xml"
     }
 
-    # Look for Origin elements
-    origin_nodes <- xml2::xml_find_all(id_node, ".//Origin")
-    if (length(origin_nodes) == 0L) next  # not derived, skip
+    # Determine whether this variable is derived, from either an Origin of a
+    # derived type or an ItemRef MethodOID. Missing elements are tolerated: a
+    # variable with neither is treated as not derived and skipped.
+    origin_nodes <- xml2::xml_find_all(id_node, ".//*[local-name()='Origin']")
+    origin_type  <- if (length(origin_nodes) > 0L) {
+      xml2::xml_attr(origin_nodes[[1]], "Type")
+    } else {
+      NA_character_
+    }
+    ref_method <- if (!is.na(oid)) oid_to_method[[oid]] else NULL
 
-    for (orig_node in origin_nodes) {
-      origin_type <- xml2::xml_attr(orig_node, "Type")
-      is_derived  <- !is.na(origin_type) &&
-        tolower(origin_type) %in% c("derived", "assigned", "predecessor", "algorithm")
+    derived_by_origin <- !is.na(origin_type) &&
+      tolower(origin_type) %in% c("derived", "assigned", "predecessor", "algorithm")
+    derived_by_method <- !is.null(ref_method)
+    if (!derived_by_origin && !derived_by_method) next  # not derived
 
-      if (!is_derived) next
+    # Derivation text: inline Origin description first, then the referenced
+    # MethodDef (ComputationMethod). Either one satisfies the check.
+    deriv_text <- NA_character_
+    if (length(origin_nodes) > 0L) {
+      deriv_nodes <- xml2::xml_find_all(origin_nodes[[1]],
+                                        ".//*[local-name()='Description']/*[local-name()='TranslatedText']")
+      if (length(deriv_nodes) > 0L) deriv_text <- xml2::xml_text(deriv_nodes[[1]])
+    }
+    if ((is.na(deriv_text) || !nzchar(deriv_text)) &&
+        !is.null(ref_method) && !is.null(method_desc[[ref_method]])) {
+      deriv_text <- method_desc[[ref_method]]
+    }
 
-      # Look for derivation description text
-      deriv_nodes <- xml2::xml_find_all(
-        orig_node,
-        ".//Description/TranslatedText"
-      )
-      deriv_text <- if (length(deriv_nodes) > 0) {
-        xml2::xml_text(deriv_nodes[[1]])
-      } else {
-        NA_character_
-      }
+    origin_label <- if (!is.na(origin_type)) origin_type else "Method"
+    has_deriv  <- !is.na(deriv_text) && nzchar(deriv_text)
+    result_val <- if (has_deriv) "pass" else "fail"
+    sev_val    <- if (has_deriv) "info" else "high"
+    metric_val <- if (has_deriv) 1.0 else 0.0
+    msg_val    <- if (has_deriv) {
+      sprintf("Derivation present for %s in %s: %s",
+              var_name, ds_name, substr(deriv_text, 1L, 80L))
+    } else {
+      sprintf("Derived variable %s in %s is missing derivation text (Origin=%s)",
+              var_name, ds_name, origin_label)
+    }
 
-      has_deriv  <- !is.na(deriv_text) && nzchar(deriv_text)
-      result_val <- if (has_deriv) "pass" else "fail"
-      sev_val    <- if (has_deriv) "info" else "high"
-      metric_val <- if (has_deriv) 1.0 else 0.0
-      msg_val    <- if (has_deriv) {
-        sprintf("Derivation text present for %s in %s: %s",
-                var_name, ds_name, substr(deriv_text, 1L, 80L))
-      } else {
-        sprintf("Derived variable %s in %s is missing derivation text (Origin Type=%s)",
-                var_name, ds_name, origin_type)
-      }
+    payload <- sprintf(
+      '{"variable":"%s","dataset":"%s","origin_type":"%s","has_derivation":%s}',
+      var_name, ds_name,
+      if (!is.na(origin_type)) origin_type else origin_label,
+      tolower(as.character(has_deriv))
+    )
 
-      payload <- sprintf(
-        '{"variable":"%s","dataset":"%s","origin_type":"%s","has_derivation":%s}',
-        var_name, ds_name,
-        if (!is.na(origin_type)) origin_type else "",
-        tolower(as.character(has_deriv))
-      )
+    rows[[length(rows) + 1L]] <- list(
+      asset_type       = "define",
+      asset_id         = ds_name,
+      source_name      = "define_xml",
+      source_version   = source_version,
+      indicator_id     = "Q-DEFINE-003",
+      indicator_name   = "Derivation Present in Define-XML",
+      indicator_domain = "quality",
+      severity         = sev_val,
+      result           = result_val,
+      metric_value     = metric_val,
+      metric_unit      = "score",
+      message          = msg_val,
+      location         = paste0(ds_name, ":", var_name),
+      evidence_payload = payload
+    )
+  }
 
-      rows[[length(rows) + 1L]] <- list(
-        asset_type       = "define",
-        asset_id         = ds_name,
-        source_name      = "define_xml",
-        source_version   = source_version,
-        indicator_id     = "Q-DEFINE-003",
-        indicator_name   = "Derivation Present in Define-XML",
-        indicator_domain = "quality",
-        severity         = sev_val,
-        result           = result_val,
-        metric_value     = metric_val,
-        metric_unit      = "score",
-        message          = msg_val,
-        location         = paste0(ds_name, ":", var_name),
-        evidence_payload = payload
+  # Warn if the file was only partially parseable, so a caller does not mistake
+  # thin evidence for a clean document.
+  if (n_items > 0L) {
+    missing_oid <- sum(is.na(xml2::xml_attr(item_defs, "OID")))
+    if (missing_oid > 0L) {
+      cli::cli_warn(
+        "{missing_oid} of {n_items} ItemDef element{?s} lack an OID; \\
+         their dataset link and derivation checks may be incomplete."
       )
     }
   }
