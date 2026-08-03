@@ -1,5 +1,10 @@
 # r4subcore (development version)
 
+- Add `evidence_schema_spec()`, which publishes the evidence schema as a tidy
+  table (column, type, required, allowed values, description) for use as a data
+  dictionary or reference.
+- Add vignette: "The R4SUB Evidence Schema", the formal specification of the
+  evidence table shared across the ecosystem.
 - Clarified the package DESCRIPTION: "R4SUB" expands to "Ready for Submission"
   (previously "R for Regulatory Submission", inconsistent with the rest of the
   ecosystem).
