@@ -21,6 +21,7 @@ Imports:
     jsonlite,
     rlang,
     stats,
+    tibble,
     utils,
     xml2
 Suggests:
