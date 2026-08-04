@@ -15,9 +15,8 @@ hash_id(..., prefix = NULL)
 A character string of the form \code{prefix-hexhash} or just \code{hexhash}.
 }
 \description{
-Creates a deterministic hash from one or more character inputs. Uses MD5
-via base R's \link[=base]{digest-like approach} for a lightweight, dependency-free
-implementation.
+Creates a deterministic hash from one or more character inputs, hashed in
+memory with \code{\link[rlang:hash]{rlang::hash()}}.
 }
 \examples{
 hash_id("ADSL", "rule_001")
