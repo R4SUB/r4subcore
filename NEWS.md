@@ -1,3 +1,13 @@
+# r4subcore (development version)
+
+- Add `check_define_consistency()` and `define_variables()`. The first compares
+  the variables declared in Define-XML against the variables actually present in
+  the datasets and emits evidence for each: a match, a variable documented but
+  absent from the data, or a variable present but not documented. Drift between
+  Define-XML and the data is a common submission problem, and this makes it a
+  scored quality indicator. The second extracts the dataset and variable pairs
+  from a Define-XML file.
+
 # r4subcore 0.2.0
 
 - Add `read_p21_report()`, which loads a Pinnacle 21 validation report from disk
