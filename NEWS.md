@@ -1,5 +1,11 @@
 # r4subcore (development version)
 
+- Add `read_p21_report()`, which loads a Pinnacle 21 validation report from disk
+  (CSV natively, Excel through the optional `readxl` package) ready for
+  `p21_to_evidence()`. A team can now go from the report Pinnacle 21 already
+  produces to scored evidence without hand-building a table.
+- `canon_severity()` now recognizes "notice", the severity Pinnacle 21 uses for
+  its lowest level, mapping it onto `info`.
 - The evidence table now carries a schema version. `as_evidence()` stamps it,
   `evidence_schema_version()` reports the current version or the version of a
   given table, and `migrate_evidence()` upgrades a table written by an older

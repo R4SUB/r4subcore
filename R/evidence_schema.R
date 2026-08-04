@@ -53,6 +53,7 @@ evidence_schema <- function() {
 canon_severity <- function(x) {
   map <- c(
     "info"     = "info",     "information" = "info",   "note" = "info",
+    "notice"   = "info",
     "low"      = "low",      "minor"       = "low",
     "medium"   = "medium",   "moderate"    = "medium", "warning" = "medium",
     "warn"     = "medium",
