@@ -12,6 +12,13 @@
   `source_name`.
 - Add `evidence_sources()`, a reference table of supported and planned evidence
   sources with their format, pillar, and entry point.
+- Harden `define_xml_to_evidence()` for real-world Define-XML variability. It now
+  matches elements by local name, so it reads files regardless of how they mix
+  the ODM and `def:` namespaces (a plain `//ItemGroupDef` query silently missed
+  namespace-prefixed elements). Derivations are resolved from a referenced
+  `MethodDef` when the `Origin` carries no inline text, missing optional
+  elements are tolerated, and a partially parseable file now returns an
+  informative warning.
 - Clarified the package DESCRIPTION: "R4SUB" expands to "Ready for Submission"
   (previously "R for Regulatory Submission", inconsistent with the rest of the
   ecosystem).
