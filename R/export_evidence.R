@@ -121,14 +121,19 @@ import_evidence <- function(file, format = c("csv", "rds", "json")) {
     )
   }
 
-  # Coerce created_at back to POSIXct (csv/json may read it as character)
-  if ("created_at" %in% names(ev) && !inherits(ev$created_at, "POSIXct")) {
-    ev$created_at <- as.POSIXct(ev$created_at, tz = "UTC")
-  }
-
-  # Coerce metric_value back to double (csv may read as integer)
-  if ("metric_value" %in% names(ev) && !is.double(ev$metric_value)) {
-    ev$metric_value <- as.double(ev$metric_value)
+  # CSV and JSON round-trips can lose column types: an all-NA character column
+  # reads back as logical, dates as character, doubles as integer. Coerce every
+  # known schema column back to its declared type before validating.
+  schema <- evidence_schema()
+  for (col in intersect(names(schema), names(ev))) {
+    vals <- ev[[col]]
+    ev[[col]] <- switch(
+      schema[[col]]$type,
+      "character" = if (!is.character(vals)) as.character(vals) else vals,
+      "double"    = if (!is.double(vals)) as.double(vals) else vals,
+      "POSIXct"   = if (!inherits(vals, "POSIXct")) as.POSIXct(vals, tz = "UTC") else vals,
+      vals
+    )
   }
 
   validate_evidence(ev)

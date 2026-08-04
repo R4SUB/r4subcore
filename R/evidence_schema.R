@@ -203,6 +203,7 @@ as_evidence <- function(x, ctx = NULL, ...) {
   x <- x[, c(intersect(schema_cols, names(x)), extra_cols), drop = FALSE]
   rownames(x) <- NULL
 
+  x <- stamp_evidence_version(x)
   validate_evidence(x)
   cli::cli_alert_success("Evidence table created: {nrow(x)} row{?s}")
   x
@@ -234,6 +235,29 @@ as_evidence <- function(x, ctx = NULL, ...) {
 #' @export
 validate_evidence <- function(ev) {
   stopifnot(is.data.frame(ev))
+
+  # Schema version gate. An absent stamp is tolerated (tables predating
+  # versioning, or round-tripped through CSV/JSON, which drop attributes). An
+  # unknown or newer stamp is refused; an older one is a warning with a pointer
+  # to migrate_evidence().
+  v <- attr(ev, "evidence_schema_version")
+  if (!is.null(v)) {
+    supported <- supported_evidence_schema_versions()
+    current <- current_evidence_schema_version()
+    if (!v %in% supported) {
+      cli::cli_abort(c(
+        "Evidence table schema version {.val {v}} is not supported.",
+        "i" = "This release of r4subcore understands: {.val {supported}}."
+      ))
+    }
+    if (match(v, supported) < match(current, supported)) {
+      cli::cli_warn(c(
+        "Evidence table uses an older schema version {.val {v}} (current is {.val {current}}).",
+        "i" = "Run {.fn migrate_evidence} to update it."
+      ))
+    }
+  }
+
   schema <- evidence_schema()
 
   # Check required columns exist
@@ -321,6 +345,19 @@ bind_evidence <- function(...) {
   }
   combined <- do.call(rbind, frames)
   rownames(combined) <- NULL
+
+  # rbind drops attributes, so re-stamp. Warn if the inputs mix schema versions.
+  versions <- unique(stats::na.omit(
+    vapply(frames, evidence_schema_version, character(1))
+  ))
+  if (length(versions) > 1L) {
+    cli::cli_warn(c(
+      "Binding evidence tables with different schema versions: {.val {versions}}.",
+      "i" = "The result is stamped {.val {current_evidence_schema_version()}}; run {.fn migrate_evidence} first to be explicit."
+    ))
+  }
+  combined <- stamp_evidence_version(combined)
+
   cli::cli_alert_success("Bound {length(frames)} evidence table{?s}: {nrow(combined)} total row{?s}")
   combined
 }

@@ -1,5 +1,15 @@
 # r4subcore (development version)
 
+- The evidence table now carries a schema version. `as_evidence()` stamps it,
+  `evidence_schema_version()` reports the current version or the version of a
+  given table, and `migrate_evidence()` upgrades a table written by an older
+  release. `validate_evidence()` tolerates an unstamped table but refuses an
+  unknown or newer version, so a table written by a future release cannot be
+  silently mis-scored.
+- Fix `import_evidence()`: a CSV or JSON round-trip could leave an all-`NA`
+  character column (for example `source_version`) typed as logical, which then
+  failed validation. Every schema column is now coerced back to its declared
+  type on import.
 - Add `evidence_schema_spec()`, which publishes the evidence schema as a tidy
   table (column, type, required, allowed values, description) for use as a data
   dictionary or reference.
