@@ -1,8 +1,7 @@
 #' Generate a Stable Hash ID
 #'
-#' Creates a deterministic hash from one or more character inputs. Uses MD5
-#' via base R's [digest-like approach][base] for a lightweight, dependency-free
-#' implementation.
+#' Creates a deterministic hash from one or more character inputs, hashed in
+#' memory with [rlang::hash()].
 #'
 #' @param ... Character values to hash together. Concatenated with `"|"`.
 #' @param prefix Optional prefix prepended to the hash (e.g., `"RUN"`, `"IND"`).
@@ -12,19 +11,15 @@
 #' hash_id("ADSL", "rule_001")
 #' hash_id("my_study", "2024-01-01", prefix = "RUN")
 #'
+#' @importFrom rlang hash
 #' @export
 hash_id <- function(..., prefix = NULL) {
   parts <- paste(c(...), collapse = "|")
-  # Use a temp file approach with md5sum for zero-dependency hashing
-
-  tmp <- tempfile()
-  on.exit(unlink(tmp), add = TRUE)
-  writeLines(parts, con = tmp)
-  md5 <- unname(tools::md5sum(tmp))
+  h <- rlang::hash(parts)
   if (!is.null(prefix)) {
-    paste0(prefix, "-", md5)
+    paste0(prefix, "-", h)
   } else {
-    md5
+    h
   }
 }
 

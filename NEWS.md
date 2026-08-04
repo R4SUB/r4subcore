@@ -1,5 +1,11 @@
 # r4subcore (development version)
 
+- `hash_id()` now hashes in memory with `rlang::hash()` instead of writing a
+  temporary file and calling `tools::md5sum` on every call. The result is the
+  same shape (a 32-character hex string, deterministic) but roughly three orders
+  of magnitude faster, which removes the main bottleneck when building a trace
+  model or generating identifiers for a large submission. The exact hash values
+  change; they are opaque identifiers, not a persisted contract.
 - Add `check_define_consistency()` and `define_variables()`. The first compares
   the variables declared in Define-XML against the variables actually present in
   the datasets and emits evidence for each: a match, a variable documented but
