@@ -1,0 +1,81 @@
+---
+title: "Reading Pinnacle 21 reports into evidence"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reading Pinnacle 21 reports into evidence}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Most clinical programming teams already run Pinnacle 21 on every submission and
+have the report on disk. That report is the fastest way to get real evidence
+into R4SUB: there is no table to build by hand. This vignette shows the two
+steps, reading the report and converting it to the shared evidence table.
+
+```{r load}
+library(r4subcore)
+```
+
+## A Pinnacle 21 export
+
+A Pinnacle 21 report lists one row per finding: a rule identifier, a message, a
+severity, the dataset and variable it concerns, and a status. Here we write a
+small export to a temporary CSV so the vignette is self-contained. Your real
+CSV or Excel export has the same shape.
+
+```{r export}
+p21 <- data.frame(
+  "Rule ID" = c("SD0001", "SD0002", "AD0018", "SD1077"),
+  Message   = c("Variable label is missing",
+                "Value not in controlled terminology",
+                "Expected variable is present",
+                "Inconsistent value length"),
+  Severity  = c("Error", "Warning", "Notice", "Error"),
+  Dataset   = c("ADSL", "ADAE", "ADSL", "ADLB"),
+  Variable  = c("AGEU", "AESEV", "RACE", "LBORRES"),
+  Status    = c("Failed", "Warning", "Passed", "Failed"),
+  check.names = FALSE
+)
+
+csv <- tempfile(fileext = ".csv")
+utils::write.csv(p21, csv, row.names = FALSE)
+```
+
+## Reading the report
+
+`read_p21_report()` loads the file. It reads CSV with base R and Excel through
+the `readxl` package when that is installed. It only reads the file; it does not
+interpret the columns yet.
+
+```{r read}
+report <- read_p21_report(csv)
+report
+```
+
+## Converting to evidence
+
+`p21_to_evidence()` maps the report onto the evidence schema shared across the
+ecosystem. It detects the rule, message, severity, dataset, variable, and result
+columns case-insensitively, so it tolerates the small naming differences between
+Pinnacle 21 versions. Pinnacle 21 severities map onto the evidence vocabulary:
+`Error` becomes `high`, `Warning` becomes `medium`, and `Notice` becomes `info`.
+
+```{r evidence}
+ctx <- r4sub_run_context("STUDY1", "DEV")
+ev  <- p21_to_evidence(report, ctx)
+
+ev[, c("indicator_id", "severity", "result", "location")]
+```
+
+The result is an ordinary evidence table. It validates against the schema, so it
+scores like any other evidence, and it can be combined with evidence from other
+sources (Define-XML, the ADRG, traceability) with `bind_evidence()` before
+computing a Submission Confidence Index.
+
+```{r validate}
+validate_evidence(ev)
+```

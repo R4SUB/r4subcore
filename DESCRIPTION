@@ -27,6 +27,7 @@ Imports:
 Suggests:
     knitr,
     r4subdata,
+    readxl,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr

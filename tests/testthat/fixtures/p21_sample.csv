@@ -1,0 +1,4 @@
+Rule ID,Message,Severity,Dataset,Variable,Status
+SD0001,Variable label is missing,Error,ADSL,AGEU,Failed
+SD0002,Value not in controlled terminology,Warning,ADAE,AESEV,Warning
+AD0018,Expected variable is present,Notice,ADSL,RACE,Passed
