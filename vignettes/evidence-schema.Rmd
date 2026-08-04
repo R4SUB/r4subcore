@@ -103,3 +103,31 @@ validate_evidence(ev)
 Because the specification is a function, downstream packages can rely on it
 directly rather than restating the column list. That is what keeps the ecosystem
 in step: there is one schema, and this is it.
+
+## Schema versioning
+
+The schema will change over time: a new column, a widened vocabulary. So that a
+table written by one release can be recognized by another, every evidence table
+carries a schema version. `as_evidence()` stamps it, and
+`evidence_schema_version()` reports it.
+
+```{r version}
+evidence_schema_version()
+evidence_schema_version(ev)
+```
+
+`validate_evidence()` reads the stamp. An unstamped table is tolerated, because
+a table can predate versioning or lose its stamp on a round-trip through CSV or
+JSON. A table stamped with a version this release does not recognize, including a
+version newer than the installed package, is refused rather than scored on
+guesswork. When a table is stamped with an older, known version,
+`migrate_evidence()` upgrades it to the current schema:
+
+```{r migrate}
+migrated <- migrate_evidence(ev)
+evidence_schema_version(migrated)
+```
+
+The policy is deliberately asymmetric: read older tables by migrating them
+forward, but never pretend to understand a newer one. That is what lets the
+ecosystem move without breaking tables already written.
