@@ -1,6 +1,6 @@
 Package: r4subcore
 Title: Core Contracts, Parsers, and Scoring Primitives
-Version: 0.1.2
+Version: 0.2.0
 Authors@R:
     person("Pawan Rama", "Mali", email = "prm@outlook.in",
            role = c("aut", "cre", "cph"),

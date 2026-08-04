@@ -1,4 +1,4 @@
-# r4subcore (development version)
+# r4subcore 0.2.0
 
 - Add `read_p21_report()`, which loads a Pinnacle 21 validation report from disk
   (CSV natively, Excel through the optional `readxl` package) ready for
