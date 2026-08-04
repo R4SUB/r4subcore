@@ -1,0 +1,105 @@
+---
+title: "The R4SUB Evidence Schema"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The R4SUB Evidence Schema}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Every package in the R4SUB ecosystem reads and writes the same evidence table.
+A quality tool, a traceability engine, and a risk model all emit rows in this
+one shape, which is what lets `r4subscore` combine them into a single readiness
+score. This article is the formal specification of that table.
+
+```{r load}
+library(r4subcore)
+```
+
+## The columns
+
+`evidence_schema_spec()` returns the schema as a table: one row per column, its
+type, whether it is required, its controlled vocabulary if it has one, and a
+short description.
+
+```{r spec}
+spec <- evidence_schema_spec()
+knitr::kable(spec)
+```
+
+A row is one observation: a single check, run against a single asset, producing
+a single result. Required columns must be present and non-missing. Nullable
+columns may be `NA`.
+
+## Controlled vocabularies
+
+Four columns are restricted to a fixed set of values. Using the canonical set
+keeps scoring and aggregation consistent across sources.
+
+```{r vocab}
+schema <- evidence_schema()
+schema$asset_type$allowed
+schema$indicator_domain$allowed
+schema$severity$allowed
+schema$result$allowed
+```
+
+`severity` runs from `info` (no weight) to `critical` (full weight).
+`indicator_domain` names the readiness pillar the check feeds: quality, trace,
+risk, or usability. `result` is the outcome, where `na` means the check did not
+apply.
+
+If your source uses different labels, `canon_severity()` and `canon_result()`
+map common aliases onto the canonical set:
+
+```{r canon}
+canon_severity(c("HIGH", "warning", "Error"))
+canon_result(c("PASS", "Failed", "N/A"))
+```
+
+## Run context
+
+`run_id` and `study_id` tie every row back to the run that produced it. Rather
+than set them by hand on each row, create a run context once and let
+`as_evidence()` fill them in:
+
+```{r context}
+ctx <- r4sub_run_context(study_id = "STUDY01", environment = "DEV")
+
+ev <- as_evidence(
+  data.frame(
+    asset_type = "validation",
+    asset_id = "ADSL",
+    source_name = "pinnacle21",
+    indicator_id = "SD0001",
+    indicator_name = "Missing variable",
+    indicator_domain = "quality",
+    severity = "high",
+    result = "fail",
+    message = "Variable AGEU is missing",
+    stringsAsFactors = FALSE
+  ),
+  ctx = ctx
+)
+
+ev[, c("run_id", "study_id", "indicator_id", "severity", "result")]
+```
+
+## Validation
+
+`as_evidence()` validates as it builds, and `validate_evidence()` checks an
+existing table against the specification: required columns present, types
+correct, and controlled vocabularies respected. A table that passes
+`validate_evidence()` is guaranteed to score.
+
+```{r validate}
+validate_evidence(ev)
+```
+
+Because the specification is a function, downstream packages can rely on it
+directly rather than restating the column list. That is what keeps the ecosystem
+in step: there is one schema, and this is it.
