@@ -1,4 +1,4 @@
-# r4subcore (development version)
+# r4subcore 0.2.1
 
 - `hash_id()` now hashes in memory with `rlang::hash()` instead of writing a
   temporary file and calling `tools::md5sum` on every call. The result is the
