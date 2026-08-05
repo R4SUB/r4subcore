@@ -1,5 +1,5 @@
 Package: r4subcore
-Title: Core Contracts, Parsers, and Scoring Primitives
+Title: Evidence Schema, Parsers, and Shared Primitives
 Version: 0.2.1
 Authors@R:
     person("Pawan Rama", "Mali", email = "prm@outlook.in",
