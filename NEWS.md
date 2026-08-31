@@ -1,3 +1,13 @@
+# r4subcore 0.3.0
+
+- Add `evidence_diff()`, which compares two evidence tables and reports what
+  changed between them: which findings were added, removed, or changed, and
+  whether each change made the submission better or worse. Rows are matched on
+  the indicator and asset, duplicate keys collapse to the worst row, and the
+  result is ordered with regressions first so a team sees what to act on. This
+  turns the evidence table into something you can track run over run, and it is
+  the raw material behind higher-level trend views such as `sci_diff()`.
+
 # r4subcore 0.2.1
 
 - `hash_id()` now hashes in memory with `rlang::hash()` instead of writing a
