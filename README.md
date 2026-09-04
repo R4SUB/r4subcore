@@ -92,6 +92,10 @@ evidence_summary(ev)
 
 **Out of scope:** full SCI calculation (`r4subscore`), dashboards (`r4subui`), traceability logic (`r4subtrace`), risk quantification (`r4subrisk`), usability indicators (`r4subusability`).
 
+## Maintained by
+
+R4SUB is part of the open-source work of [TechWorksLab](https://techworkslab.com) - clinical programming and regulatory submissions. Maintainer: Pawan Rama Mali.
+
 ## License
 
 MIT
