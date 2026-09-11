@@ -99,3 +99,7 @@ R4SUB is part of the open-source work of [TechWorksLab](https://techworkslab.com
 ## License
 
 MIT
+
+## Further reading
+
+- [Turning Pinnacle 21 and Define-XML output into evidence you can score](https://techworkslab.com/insights-p21-define-to-evidence), the evidence-table schema this package defines, from TECHWORKSLAB.
