@@ -36,6 +36,10 @@ reference:
       - bind_evidence
       - evidence_summary
       - evidence_schema
+      - evidence_schema_spec
+      - evidence_schema_version
+      - migrate_evidence
+      - evidence_diff
   - title: "Evidence Export & Import"
     contents:
       - export_evidence
@@ -43,6 +47,14 @@ reference:
   - title: "Define-XML Parser"
     contents:
       - define_xml_to_evidence
+      - define_variables
+      - check_define_consistency
+  - title: "Evidence Sources (ADRG / P21)"
+    contents:
+      - evidence_sources
+      - read_p21_report
+      - adrg_to_evidence
+      - adrg_sections
   - title: "Utilities"
     contents:
       - aggregate_indicator_score

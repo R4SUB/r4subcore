@@ -1,3 +1,7 @@
+# r4subcore 0.3.1
+
+- Metadata and documentation polish for CRAN submission; no user-facing changes.
+
 # r4subcore 0.3.0
 
 - Add `evidence_diff()`, which compares two evidence tables and reports what
