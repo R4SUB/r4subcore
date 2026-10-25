@@ -80,14 +80,13 @@ xml_txt <- '<?xml version="1.0" encoding="UTF-8"?>
 tmp <- tempfile(fileext = ".xml")
 writeLines(xml_txt, tmp)
 ctx <- r4sub_run_context("STUDY001", "DEV")
-#> ℹ Run context created: "R4S-20260716044935-vj57qv4a"
+#> ℹ Run context created: "R4S-20261025204218-11kz8bwc"
 ev <- define_xml_to_evidence(tmp, ctx)
-#> ℹ Define-XML: found 0 dataset(s) (ItemGroupDef)
+#> ℹ Define-XML: found 1 dataset(s) (ItemGroupDef)
 #> ℹ Define-XML: found 2 variable definition(s) (ItemDef)
-#> ! No ItemGroupDef elements found in Define-XML
-#> ℹ define_xml_to_evidence: 3 rows generated
-#> ✔ Evidence table created: 3 rows
+#> ℹ define_xml_to_evidence: 4 rows generated
+#> ✔ Evidence table created: 4 rows
 nrow(ev)
-#> [1] 3
+#> [1] 4
 # }
 ```

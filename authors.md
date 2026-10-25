@@ -10,14 +10,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/R4SUB/r4subcore/blob/main/DESCRIPTION)
 
-Mali P (2026). *r4subcore: Core Contracts, Parsers, and Scoring
-Primitives*. R package version 0.1.2,
+Mali P (2026). *r4subcore: Evidence Schema, Parsers, and Shared
+Primitives*. R package version 0.3.1,
 <https://r4sub.github.io/r4subcore/>.
 
     @Manual{,
-      title = {r4subcore: Core Contracts, Parsers, and Scoring Primitives},
+      title = {r4subcore: Evidence Schema, Parsers, and Shared Primitives},
       author = {Pawan Rama Mali},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.3.1},
       url = {https://r4sub.github.io/r4subcore/},
     }

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">r4subcore</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with r4subcore</a></li>
+<li><a class="dropdown-item" href="../articles/evidence-schema.html">The R4SUB Evidence Schema</a></li>
+    <li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with r4subcore</a></li>
+    <li><a class="dropdown-item" href="../articles/pinnacle21.html">Reading Pinnacle 21 reports into evidence</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -75,15 +77,15 @@ Regulatory Submission) ecosystem. It defines three responsibilities that
 every other R4SUB pillar package depends on:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Run context</strong> — a lightweight metadata envelope that
+<strong>Run context</strong> - a lightweight metadata envelope that
 ties every piece of evidence back to a specific study and execution
 event.</li>
 <li>
-<strong>Evidence schema</strong> — a fixed 17-column contract that
+<strong>Evidence schema</strong> - a fixed 17-column contract that
 standardises how findings from heterogeneous sources (validators,
 parsers, manual checks) are stored and exchanged.</li>
 <li>
-<strong>Validation helpers</strong> — functions that enforce the
+<strong>Validation helpers</strong> - functions that enforce the
 schema at every ingestion point so downstream scoring and profiling can
 always trust the data.</li>
 </ol>
@@ -97,14 +99,14 @@ create is stamped with the <code>run_id</code> and <code>study_id</code>
 from its context, ensuring full traceability.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/r4sub_run_context.html">r4sub_run_context</a></span><span class="op">(</span>study_id <span class="op">=</span> <span class="st">"STUDY001"</span>, environment <span class="op">=</span> <span class="st">"DEV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run context created: <span style="color: #0000BB;">"R4S-20260716044939-wl4dieex"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run context created: <span style="color: #0000BB;">"R4S-20261025204225-wl4dieex"</span></span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ctx</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;r4sub_run_context&gt;</span></span>
-<span><span class="co">#&gt;   run_id:       R4S-20260716044939-wl4dieex </span></span>
+<span><span class="co">#&gt;   run_id:       R4S-20261025204225-wl4dieex </span></span>
 <span><span class="co">#&gt;   study_id:     STUDY001 </span></span>
 <span><span class="co">#&gt;   environment:  DEV </span></span>
 <span><span class="co">#&gt;   user:         runner </span></span>
-<span><span class="co">#&gt;   created_at:   2026-07-16 04:49:39</span></span></code></pre></div>
+<span><span class="co">#&gt;   created_at:   2026-10-25 20:42:25</span></span></code></pre></div>
 <p><code>run_id</code> is generated automatically from the timestamp,
 but you can supply your own if you need reproducibility in tests or
 pipelines.</p>
@@ -217,7 +219,7 @@ contract at any time:</p>
 <td><code>metric_value</code></td>
 <td>double</td>
 <td>nullable</td>
-<td>Numeric score (0–1 scale typical)</td>
+<td>Numeric score (0-1 scale typical)</td>
 </tr>
 <tr class="odd">
 <td><code>metric_unit</code></td>
@@ -304,7 +306,7 @@ context,</li>
 <span><span class="co">#&gt; [1] 17</span></span>
 <span><span class="va">ev</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"run_id"</span>, <span class="st">"study_id"</span>, <span class="st">"indicator_id"</span>, <span class="st">"result"</span>, <span class="st">"severity"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;                        run_id study_id indicator_id result severity</span></span>
-<span><span class="co">#&gt; 1 R4S-20260716044939-wl4dieex STUDY001   P21-SD0001   fail     high</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 R4S-20261025204225-wl4dieex STUDY001   P21-SD0001   fail     high</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validating-evidence">Validating Evidence<a class="anchor" aria-label="anchor" href="#validating-evidence"></a>
@@ -324,7 +326,7 @@ before processing:</p>
 before combining, preventing schema violations from silently
 propagating:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># A second finding — a passed check on the same dataset</span></span>
+<code class="sourceCode R"><span><span class="co"># A second finding - a passed check on the same dataset</span></span>
 <span><span class="va">raw2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  asset_type       <span class="op">=</span> <span class="st">"dataset"</span>,</span>
 <span>  asset_id         <span class="op">=</span> <span class="st">"ADSL"</span>,</span>
@@ -385,14 +387,14 @@ be consumed by non-R tooling.</p>
 consume it directly:</p>
 <ul>
 <li>
-<strong>r4subusability</strong> — four usability indicators (label
+<strong>r4subusability</strong> - four usability indicators (label
 quality, Define-XML completeness, annotation coverage, reviewer guide
 presence).</li>
 <li>
-<strong>r4subscore</strong> — weighted scoring across all domains
+<strong>r4subscore</strong> - weighted scoring across all domains
 into a single submission readiness index.</li>
 <li>
-<strong>r4subprofile</strong> — regulatory authority profile
+<strong>r4subprofile</strong> - regulatory authority profile
 templates (FDA, EMA, PMDA, ANVISA, Health Canada, NMPA) that map scores
 to submission requirements.</li>
 </ul>

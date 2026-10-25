@@ -17,6 +17,14 @@
   : Summarize Evidence
 - [`evidence_schema()`](https://r4sub.github.io/r4subcore/reference/evidence_schema.md)
   : Evidence Table Schema Definition
+- [`evidence_schema_spec()`](https://r4sub.github.io/r4subcore/reference/evidence_schema_spec.md)
+  : Evidence Schema Specification
+- [`evidence_schema_version()`](https://r4sub.github.io/r4subcore/reference/evidence_schema_version.md)
+  : Evidence Schema Version
+- [`migrate_evidence()`](https://r4sub.github.io/r4subcore/reference/migrate_evidence.md)
+  : Migrate an Evidence Table to a Newer Schema Version
+- [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md)
+  : Compare Two Evidence Tables
 
 ## Evidence Export & Import
 
@@ -29,6 +37,21 @@
 
 - [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md)
   : Parse Define-XML to Evidence
+- [`define_variables()`](https://r4sub.github.io/r4subcore/reference/define_variables.md)
+  : Extract the Variables Declared in a Define-XML File
+- [`check_define_consistency()`](https://r4sub.github.io/r4subcore/reference/check_define_consistency.md)
+  : Check Define-XML Against Dataset Contents
+
+## Evidence Sources (ADRG / P21)
+
+- [`evidence_sources()`](https://r4sub.github.io/r4subcore/reference/evidence_sources.md)
+  : Supported and Planned Evidence Sources
+- [`read_p21_report()`](https://r4sub.github.io/r4subcore/reference/read_p21_report.md)
+  : Read a Pinnacle 21 Report from Disk
+- [`adrg_to_evidence()`](https://r4sub.github.io/r4subcore/reference/adrg_to_evidence.md)
+  : Convert ADRG Section Coverage to Evidence
+- [`adrg_sections()`](https://r4sub.github.io/r4subcore/reference/adrg_sections.md)
+  : Standard ADRG Section Catalog
 
 ## Utilities
 

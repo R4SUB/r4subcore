@@ -1,15 +1,17 @@
-# r4subcore: Core Contracts, Parsers, and Scoring Primitives
+# r4subcore: Evidence Schema, Parsers, and Shared Primitives
 
-Foundational package in the R4SUB (R for Regulatory Submission)
-ecosystem. Defines the core evidence table schema, parsers, indicator
-abstractions, and scoring primitives needed to quantify clinical
-submission readiness. Provides a standardized contract for ingesting
-heterogeneous sources (validation outputs, metadata, traceability) into
-a single evidence framework.
+Foundational package in the R4SUB (Ready for Submission) ecosystem.
+Defines the core evidence table schema, parsers, indicator abstractions,
+and scoring primitives needed to quantify clinical submission readiness.
+Provides a standardized contract for ingesting heterogeneous sources
+(validation outputs, metadata, traceability) into a single evidence
+framework.
 
 ## See also
 
 Useful links:
+
+- <https://r4sub.github.io/r4subcore/>
 
 - <https://github.com/R4SUB/r4subcore>
 

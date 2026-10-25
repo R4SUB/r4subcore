@@ -1,9 +1,8 @@
 # Generate a Stable Hash ID
 
-Creates a deterministic hash from one or more character inputs. Uses MD5
-via base R's [digest-like
-approach](https://rdrr.io/r/base/base-package.html) for a lightweight,
-dependency-free implementation.
+Creates a deterministic hash from one or more character inputs, hashed
+in memory with
+[`rlang::hash()`](https://rlang.r-lib.org/reference/hash.html).
 
 ## Usage
 
@@ -29,7 +28,7 @@ A character string of the form `prefix-hexhash` or just `hexhash`.
 
 ``` r
 hash_id("ADSL", "rule_001")
-#> [1] "a0570f2e91174ffbf899427461748fbd"
+#> [1] "051a407df82eb34dac57a6a40d0368a0"
 hash_id("my_study", "2024-01-01", prefix = "RUN")
-#> [1] "RUN-b1f41f1eb58f223c4ede5384464281e5"
+#> [1] "RUN-ada9beca8a67f6c7118686582e9a1572"
 ```

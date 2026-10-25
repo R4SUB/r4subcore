@@ -11,12 +11,12 @@ library(r4subcore)
 ecosystem. It defines three responsibilities that every other R4SUB
 pillar package depends on:
 
-1.  **Run context** — a lightweight metadata envelope that ties every
+1.  **Run context** - a lightweight metadata envelope that ties every
     piece of evidence back to a specific study and execution event.
-2.  **Evidence schema** — a fixed 17-column contract that standardises
+2.  **Evidence schema** - a fixed 17-column contract that standardises
     how findings from heterogeneous sources (validators, parsers, manual
     checks) are stored and exchanged.
-3.  **Validation helpers** — functions that enforce the schema at every
+3.  **Validation helpers** - functions that enforce the schema at every
     ingestion point so downstream scoring and profiling can always trust
     the data.
 
@@ -30,14 +30,14 @@ traceability.
 ``` r
 
 ctx <- r4sub_run_context(study_id = "STUDY001", environment = "DEV")
-#> ℹ Run context created: "R4S-20260716044939-wl4dieex"
+#> ℹ Run context created: "R4S-20261025204225-wl4dieex"
 print(ctx)
 #> <r4sub_run_context>
-#>   run_id:       R4S-20260716044939-wl4dieex 
+#>   run_id:       R4S-20261025204225-wl4dieex 
 #>   study_id:     STUDY001 
 #>   environment:  DEV 
 #>   user:         runner 
-#>   created_at:   2026-07-16 04:49:39
+#>   created_at:   2026-10-25 20:42:25
 ```
 
 `run_id` is generated automatically from the timestamp, but you can
@@ -87,7 +87,7 @@ names(schema)
 | `indicator_domain` | character | yes | One of: quality, trace, risk, usability |
 | `severity` | character | yes | One of: info, low, medium, high, critical |
 | `result` | character | yes | One of: pass, fail, warn, na |
-| `metric_value` | double | nullable | Numeric score (0–1 scale typical) |
+| `metric_value` | double | nullable | Numeric score (0-1 scale typical) |
 | `metric_unit` | character | nullable | e.g. “score”, “proportion”, “count” |
 | `message` | character | nullable | Human-readable finding description |
 | `location` | character | nullable | e.g. “ADSL.USUBJID” |
@@ -151,7 +151,7 @@ ncol(ev)
 #> [1] 17
 ev[, c("run_id", "study_id", "indicator_id", "result", "severity")]
 #>                        run_id study_id indicator_id result severity
-#> 1 R4S-20260716044939-wl4dieex STUDY001   P21-SD0001   fail     high
+#> 1 R4S-20261025204225-wl4dieex STUDY001   P21-SD0001   fail     high
 ```
 
 ## Validating Evidence
@@ -176,7 +176,7 @@ violations from silently propagating:
 
 ``` r
 
-# A second finding — a passed check on the same dataset
+# A second finding - a passed check on the same dataset
 raw2 <- data.frame(
   asset_type       = "dataset",
   asset_id         = "ADSL",
@@ -241,11 +241,11 @@ consumed by non-R tooling.
 Once you have an evidence table, the other R4SUB pillar packages consume
 it directly:
 
-- **r4subusability** — four usability indicators (label quality,
+- **r4subusability** - four usability indicators (label quality,
   Define-XML completeness, annotation coverage, reviewer guide
   presence).
-- **r4subscore** — weighted scoring across all domains into a single
+- **r4subscore** - weighted scoring across all domains into a single
   submission readiness index.
-- **r4subprofile** — regulatory authority profile templates (FDA, EMA,
+- **r4subprofile** - regulatory authority profile templates (FDA, EMA,
   PMDA, ANVISA, Health Canada, NMPA) that map scores to submission
   requirements.
