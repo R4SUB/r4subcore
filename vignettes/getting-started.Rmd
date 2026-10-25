@@ -24,12 +24,12 @@ library(r4subcore)
 ecosystem. It defines three responsibilities that every other R4SUB pillar
 package depends on:
 
-1. **Run context** — a lightweight metadata envelope that ties every piece of
+1. **Run context** - a lightweight metadata envelope that ties every piece of
    evidence back to a specific study and execution event.
-2. **Evidence schema** — a fixed 17-column contract that standardises how
+2. **Evidence schema** - a fixed 17-column contract that standardises how
    findings from heterogeneous sources (validators, parsers, manual checks) are
    stored and exchanged.
-3. **Validation helpers** — functions that enforce the schema at every ingestion
+3. **Validation helpers** - functions that enforce the schema at every ingestion
    point so downstream scoring and profiling can always trust the data.
 
 ## Creating a Run Context
@@ -79,7 +79,7 @@ names(schema)
 | `indicator_domain` | character | yes | One of: quality, trace, risk, usability |
 | `severity` | character | yes | One of: info, low, medium, high, critical |
 | `result` | character | yes | One of: pass, fail, warn, na |
-| `metric_value` | double | nullable | Numeric score (0–1 scale typical) |
+| `metric_value` | double | nullable | Numeric score (0-1 scale typical) |
 | `metric_unit` | character | nullable | e.g. "score", "proportion", "count" |
 | `message` | character | nullable | Human-readable finding description |
 | `location` | character | nullable | e.g. "ADSL.USUBJID" |
@@ -151,7 +151,7 @@ When combining evidence from different sources or indicators, use
 preventing schema violations from silently propagating:
 
 ```{r bind}
-# A second finding — a passed check on the same dataset
+# A second finding - a passed check on the same dataset
 raw2 <- data.frame(
   asset_type       = "dataset",
   asset_id         = "ADSL",
@@ -206,9 +206,9 @@ by non-R tooling.
 Once you have an evidence table, the other R4SUB pillar packages consume it
 directly:
 
-- **r4subusability** — four usability indicators (label quality, Define-XML
+- **r4subusability** - four usability indicators (label quality, Define-XML
   completeness, annotation coverage, reviewer guide presence).
-- **r4subscore** — weighted scoring across all domains into a single submission
+- **r4subscore** - weighted scoring across all domains into a single submission
   readiness index.
-- **r4subprofile** — regulatory authority profile templates (FDA, EMA, PMDA,
+- **r4subprofile** - regulatory authority profile templates (FDA, EMA, PMDA,
   ANVISA, Health Canada, NMPA) that map scores to submission requirements.

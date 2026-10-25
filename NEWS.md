@@ -1,3 +1,7 @@
+# r4subcore 0.3.1
+
+- Metadata and documentation polish for CRAN submission; no user-facing changes.
+
 # r4subcore 0.3.0
 
 - Add `evidence_diff()`, which compares two evidence tables and reports what
@@ -76,7 +80,7 @@
 # r4subcore 0.1.1
 
 - Added ORCID for package author in `Authors@R`.
-- Added `r4subdata` to `Suggests` — the companion example-data package is now
+- Added `r4subdata` to `Suggests` - the companion example-data package is now
   on CRAN.
 
 # r4subcore 0.1.0

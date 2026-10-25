@@ -1,6 +1,6 @@
 ## Submission
 
-This is an update of r4subcore from 0.1.0 (on CRAN) to 0.2.1. It is a feature
+This is an update of r4subcore from 0.1.0 (on CRAN) to 0.3.1. It is a feature
 release for the R4SUB (Ready for Submission) ecosystem. Highlights:
 
 * Evidence schema versioning with `evidence_schema_version()` and
