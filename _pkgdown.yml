@@ -20,7 +20,7 @@ navbar:
       aria-label: GitHub
 
 home:
-  title: "r4subcore — R4SUB Foundation Layer"
+  title: "r4subcore: R4SUB Foundation Layer"
   description: >
     Foundation layer of the R4SUB ecosystem. Provides the run context,
     evidence schema, validation, and export utilities used by all R4SUB packages.
