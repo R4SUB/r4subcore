@@ -1,5 +1,11 @@
 # r4subcore 0.3.1.9000 (development)
 
+- Add `dataset_variables()`, which builds the `(dataset, variable)` table that
+  `check_define_consistency()` compares against Define-XML. It reads variable
+  names from a single data frame (with a supplied dataset name), a named list of
+  data frames, or a directory of `.rds` files (one data frame each); SAS
+  transport `.xpt` files are read when the optional `haven` package is
+  installed. It only reads names and emits no scoring or evidence of its own.
 - Fix the "Getting Started" vignette, which still expanded "R4SUB" as
   "R for Regulatory Submission". It now reads "Ready for Submission", matching
   the DESCRIPTION and the rest of the ecosystem (corrected in 0.2.0).
