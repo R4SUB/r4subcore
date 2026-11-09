@@ -20,7 +20,7 @@ library(r4subcore)
 
 ## Overview
 
-`r4subcore` is the foundation of the R4SUB (R for Regulatory Submission)
+`r4subcore` is the foundation of the R4SUB (Ready for Submission)
 ecosystem. It defines three responsibilities that every other R4SUB pillar
 package depends on:
 
