@@ -25,6 +25,7 @@ Imports:
     utils,
     xml2
 Suggests:
+    haven,
     knitr,
     r4subdata,
     readxl,
