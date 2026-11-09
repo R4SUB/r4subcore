@@ -1,5 +1,20 @@
 # Changelog
 
+## r4subcore 0.3.1.9000 (development)
+
+- Fix the “Getting Started” vignette, which still expanded “R4SUB” as “R
+  for Regulatory Submission”. It now reads “Ready for Submission”,
+  matching the DESCRIPTION and the rest of the ecosystem (corrected in
+  0.2.0).
+- Add tests for
+  [`export_evidence()`](https://r4sub.github.io/r4subcore/reference/export_evidence.md)
+  /
+  [`import_evidence()`](https://r4sub.github.io/r4subcore/reference/import_evidence.md):
+  the JSON round-trip, the traceability attributes on the returned path,
+  the missing-file error, and a regression guard for the 0.2.0 fix that
+  coerces an all-`NA` character column back to character on import. No
+  change to behavior.
+
 ## r4subcore 0.3.1
 
 - Metadata and documentation polish for CRAN submission; no user-facing

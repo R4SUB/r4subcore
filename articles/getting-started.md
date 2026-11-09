@@ -7,7 +7,7 @@ library(r4subcore)
 
 ## Overview
 
-`r4subcore` is the foundation of the R4SUB (R for Regulatory Submission)
+`r4subcore` is the foundation of the R4SUB (Ready for Submission)
 ecosystem. It defines three responsibilities that every other R4SUB
 pillar package depends on:
 
@@ -30,14 +30,14 @@ traceability.
 ``` r
 
 ctx <- r4sub_run_context(study_id = "STUDY001", environment = "DEV")
-#> ℹ Run context created: "R4S-20261025204225-wl4dieex"
+#> ℹ Run context created: "R4S-20261109175724-wl4dieex"
 print(ctx)
 #> <r4sub_run_context>
-#>   run_id:       R4S-20261025204225-wl4dieex 
+#>   run_id:       R4S-20261109175724-wl4dieex 
 #>   study_id:     STUDY001 
 #>   environment:  DEV 
 #>   user:         runner 
-#>   created_at:   2026-10-25 20:42:25
+#>   created_at:   2026-11-09 17:57:24
 ```
 
 `run_id` is generated automatically from the timestamp, but you can
@@ -151,7 +151,7 @@ ncol(ev)
 #> [1] 17
 ev[, c("run_id", "study_id", "indicator_id", "result", "severity")]
 #>                        run_id study_id indicator_id result severity
-#> 1 R4S-20261025204225-wl4dieex STUDY001   P21-SD0001   fail     high
+#> 1 R4S-20261109175724-wl4dieex STUDY001   P21-SD0001   fail     high
 ```
 
 ## Validating Evidence
