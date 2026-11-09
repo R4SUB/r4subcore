@@ -1,5 +1,13 @@
 # r4subcore 0.3.1.9000 (development)
 
+- Add `evidence_delta()` and `evidence_diff_summary()`, which extend
+  `evidence_diff()` reporting without changing its output. `evidence_delta()`
+  appends a signed per-row `delta` to a diff, scoring each change from the
+  existing `result_to_score()` and `severity_to_weight()` primitives as the
+  movement in weighted penalty (positive means the penalty fell).
+  `evidence_diff_summary()` rolls a diff up into a tidy `metric`/`value` frame
+  with the per-category counts and a single `net_delta`. The net-movement
+  figure is labelled a diagnostic rollup, not the Submission Confidence Index.
 - Add `dataset_variables()`, which builds the `(dataset, variable)` table that
   `check_define_consistency()` compares against Define-XML. It reads variable
   names from a single data frame (with a supplied dataset name), a named list of
