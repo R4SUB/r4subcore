@@ -77,6 +77,9 @@ evidence_summary(ev)
 | `evidence_summary()` | Pass/warn/fail counts by domain |
 | `p21_to_evidence()` | Ingest Pinnacle 21 CSV output |
 | `define_xml_to_evidence()` | Ingest Define-XML metadata |
+| `dataset_variables()` | Build a `(dataset, variable)` table to feed `check_define_consistency()` |
+| `evidence_delta()` | Append a signed per-row score delta to an `evidence_diff()` result |
+| `evidence_diff_summary()` | Roll an `evidence_diff()` up into a tidy `metric`/`value` diagnostic summary |
 
 ## Design Principles
 
