@@ -4,16 +4,42 @@
 \alias{bind_evidence}
 \title{Bind Evidence Tables}
 \usage{
-bind_evidence(...)
+bind_evidence(
+  ...,
+  keys = c("indicator_id", "asset_id", "location"),
+  on_duplicate = c("keep", "first", "last", "error")
+)
 }
 \arguments{
-\item{...}{Evidence data.frames to bind.}
+\item{...}{Evidence data.frames to bind, or a single list of them.}
+
+\item{keys}{Character vector of columns forming the collision key, passed to
+\code{\link[=evidence_collisions]{evidence_collisions()}}. Defaults to
+\code{c("indicator_id", "asset_id", "location")}.}
+
+\item{on_duplicate}{How to handle keys that appear on more than one row:
+\code{"keep"} (default) keeps all rows, \code{"first"} keeps the first row on each
+key, \code{"last"} keeps the last, and \code{"error"} aborts if any key collides.}
 }
 \value{
-A single combined evidence data.frame.
+A single combined evidence data.frame with an \code{evidence_collisions}
+attribute holding the collision report (see \code{\link[=evidence_collisions]{evidence_collisions()}}).
 }
 \description{
-Row-binds multiple evidence data.frames after validating each one.
+Combines several R4SUB evidence data.frames -- for example the outputs of
+different adapters or indicators across the ecosystem -- into one validated
+evidence table. Each input is validated against the evidence schema, the
+tables are row-bound, and colliding rows (more than one row sharing the same
+key) are detected and reported. The combined table carries a collision report
+in its \code{evidence_collisions} attribute, and duplicates can optionally be
+resolved.
+}
+\details{
+The default \code{on_duplicate = "keep"} preserves every row, so the combined
+table is exactly the row-bind of the inputs; the collision report is attached
+either way. Resolution, when requested, keeps the first or last row on each
+key, or aborts. This is purely structural: it never scores, weights, or
+decides which of two conflicting rows is correct.
 }
 \examples{
 ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
@@ -33,5 +59,9 @@ ev1 <- make_ev("IND-001")
 ev2 <- make_ev("IND-002")
 combined <- suppressMessages(bind_evidence(ev1, ev2))
 nrow(combined)
+attr(combined, "evidence_collisions")
 
+}
+\seealso{
+\code{\link[=evidence_collisions]{evidence_collisions()}}.
 }

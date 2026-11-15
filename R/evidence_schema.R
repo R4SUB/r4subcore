@@ -311,12 +311,149 @@ validate_evidence <- function(ev) {
   invisible(TRUE)
 }
 
+# Build a collision key from one or more evidence columns. NA is mapped to an
+# explicit sentinel so that two rows that are both NA on a key column group
+# together, and never collide with a literal "NA" string. Internal.
+.evidence_key <- function(ev, keys) {
+  parts <- lapply(keys, function(k) {
+    v <- as.character(ev[[k]])
+    v[is.na(v)] <- "\u0001<NA>\u0001"
+    v
+  })
+  do.call(paste, c(parts, sep = "\u0001"))
+}
+
+#' Detect Colliding Evidence Rows
+#'
+#' Finds rows in an evidence table that share the same key and reports them.
+#' By default the key is the `(indicator_id, asset_id, location)` triple that
+#' identifies a single finding on a single place in an asset, so more than one
+#' row on that key is a duplicate that assembling adapters can introduce. A
+#' collision is a *conflict* when the colliding rows disagree on their outcome,
+#' that is when they carry more than one distinct value in `conflict_on`
+#' (`result` by default).
+#'
+#' This is purely structural: it groups rows and counts distinct values. It
+#' applies no weights, thresholds, or scoring and makes no judgement about which
+#' row is correct.
+#'
+#' @param ev A valid evidence data.frame.
+#' @param keys Character vector of column names forming the collision key.
+#'   Defaults to `c("indicator_id", "asset_id", "location")`.
+#' @param conflict_on Single column name whose distinct values decide whether a
+#'   collision is a conflict. Defaults to `"result"`.
+#'
+#' @return A data.frame with one row per colliding key (keys appearing on more
+#'   than one row), ordered by the key columns. It has the `keys` columns plus
+#'   `n` (number of rows on the key), `n_distinct` (distinct non-`NA` values of
+#'   `conflict_on`), `conflict` (logical, `TRUE` when `n_distinct > 1`), and
+#'   `values` (the distinct `conflict_on` values, comma separated). A table with
+#'   no collisions yields a zero-row frame with these columns.
+#'
+#' @seealso [bind_evidence()], which uses this to report and optionally resolve
+#'   collisions while combining tables.
+#'
+#' @examples
+#' ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
+#' ev <- suppressMessages(as_evidence(
+#'   data.frame(
+#'     asset_type = "validation", asset_id = rep("ADSL", 3),
+#'     source_name = c("p21", "p21", "other"),
+#'     indicator_id = c("SD0001", "SD0001", "SD0002"),
+#'     indicator_name = c("SD0001", "SD0001", "SD0002"),
+#'     indicator_domain = "quality", severity = "high",
+#'     result = c("fail", "warn", "pass"), location = c("AGE", "AGE", "SEX"),
+#'     stringsAsFactors = FALSE
+#'   ),
+#'   ctx = ctx
+#' ))
+#' evidence_collisions(ev)
+#'
+#' @importFrom cli cli_abort
+#' @export
+evidence_collisions <- function(ev,
+                                keys = c("indicator_id", "asset_id", "location"),
+                                conflict_on = "result") {
+  validate_evidence(ev)
+  if (!is.character(keys) || length(keys) < 1L) {
+    cli::cli_abort("{.arg keys} must be a non-empty character vector.")
+  }
+  if (!is.character(conflict_on) || length(conflict_on) != 1L) {
+    cli::cli_abort("{.arg conflict_on} must be a single column name.")
+  }
+  missing_cols <- setdiff(c(keys, conflict_on), names(ev))
+  if (length(missing_cols) > 0L) {
+    cli::cli_abort(
+      "Column{?s} not found in evidence table: {.field {missing_cols}}"
+    )
+  }
+
+  empty <- cbind(
+    ev[0, keys, drop = FALSE],
+    data.frame(n = integer(0), n_distinct = integer(0),
+               conflict = logical(0), values = character(0),
+               stringsAsFactors = FALSE)
+  )
+  rownames(empty) <- NULL
+  if (nrow(ev) == 0L) {
+    return(empty)
+  }
+
+  key <- .evidence_key(ev, keys)
+  idx_by_key <- split(seq_len(nrow(ev)), key)
+  dup <- idx_by_key[lengths(idx_by_key) > 1L]
+  if (length(dup) == 0L) {
+    return(empty)
+  }
+
+  rows <- lapply(dup, function(idx) {
+    cvals <- ev[[conflict_on]][idx]
+    distinct <- unique(cvals[!is.na(cvals)])
+    cbind(
+      ev[idx[1L], keys, drop = FALSE],
+      data.frame(
+        n          = length(idx),
+        n_distinct = length(distinct),
+        conflict   = length(distinct) > 1L,
+        values     = paste(sort(distinct), collapse = ", "),
+        stringsAsFactors = FALSE
+      )
+    )
+  })
+  out <- do.call(rbind, rows)
+  out <- out[do.call(order, out[keys]), , drop = FALSE]
+  rownames(out) <- NULL
+  out
+}
+
 #' Bind Evidence Tables
 #'
-#' Row-binds multiple evidence data.frames after validating each one.
+#' Combines several R4SUB evidence data.frames -- for example the outputs of
+#' different adapters or indicators across the ecosystem -- into one validated
+#' evidence table. Each input is validated against the evidence schema, the
+#' tables are row-bound, and colliding rows (more than one row sharing the same
+#' key) are detected and reported. The combined table carries a collision report
+#' in its `evidence_collisions` attribute, and duplicates can optionally be
+#' resolved.
 #'
-#' @param ... Evidence data.frames to bind.
-#' @return A single combined evidence data.frame.
+#' The default `on_duplicate = "keep"` preserves every row, so the combined
+#' table is exactly the row-bind of the inputs; the collision report is attached
+#' either way. Resolution, when requested, keeps the first or last row on each
+#' key, or aborts. This is purely structural: it never scores, weights, or
+#' decides which of two conflicting rows is correct.
+#'
+#' @param ... Evidence data.frames to bind, or a single list of them.
+#' @param keys Character vector of columns forming the collision key, passed to
+#'   [evidence_collisions()]. Defaults to
+#'   `c("indicator_id", "asset_id", "location")`.
+#' @param on_duplicate How to handle keys that appear on more than one row:
+#'   `"keep"` (default) keeps all rows, `"first"` keeps the first row on each
+#'   key, `"last"` keeps the last, and `"error"` aborts if any key collides.
+#'
+#' @return A single combined evidence data.frame with an `evidence_collisions`
+#'   attribute holding the collision report (see [evidence_collisions()]).
+#'
+#' @seealso [evidence_collisions()].
 #'
 #' @examples
 #' ctx <- suppressMessages(r4sub_run_context("STUDY1", "DEV"))
@@ -336,11 +473,24 @@ validate_evidence <- function(ev) {
 #' ev2 <- make_ev("IND-002")
 #' combined <- suppressMessages(bind_evidence(ev1, ev2))
 #' nrow(combined)
+#' attr(combined, "evidence_collisions")
 #'
 #' @importFrom cli cli_alert_success
+#' @importFrom rlang arg_match
 #' @export
-bind_evidence <- function(...) {
+bind_evidence <- function(...,
+                          keys = c("indicator_id", "asset_id", "location"),
+                          on_duplicate = c("keep", "first", "last", "error")) {
+  on_duplicate <- rlang::arg_match(on_duplicate)
   frames <- list(...)
+  # Accept a single list of frames, e.g. bind_evidence(list(ev1, ev2)).
+  if (length(frames) == 1L && is.list(frames[[1]]) &&
+      !is.data.frame(frames[[1]])) {
+    frames <- frames[[1]]
+  }
+  if (length(frames) == 0L) {
+    cli::cli_abort("{.fn bind_evidence} needs at least one evidence table.")
+  }
   for (i in seq_along(frames)) {
     validate_evidence(frames[[i]])
   }
@@ -358,8 +508,45 @@ bind_evidence <- function(...) {
     ))
   }
   combined <- stamp_evidence_version(combined)
+  n_frames <- length(frames)
 
-  cli::cli_alert_success("Bound {length(frames)} evidence table{?s}: {nrow(combined)} total row{?s}")
+  # Detect collisions on the combined table (only when every key column exists).
+  report <- NULL
+  if (all(keys %in% names(combined))) {
+    report <- evidence_collisions(combined, keys = keys)
+  }
+  n_dup_keys  <- if (is.null(report)) 0L else nrow(report)
+  n_conflicts <- if (is.null(report)) 0L else sum(report$conflict)
+
+  if (n_dup_keys > 0L && on_duplicate == "error") {
+    cli::cli_abort(c(
+      "Evidence tables collide on {n_dup_keys} key{?s} ({n_conflicts} with differing {.field result}).",
+      "i" = "Inspect them with {.fn evidence_collisions}, or pass {.code on_duplicate = \"first\"}/{.code \"last\"} to resolve."
+    ))
+  }
+
+  if (n_dup_keys > 0L && on_duplicate %in% c("first", "last")) {
+    key <- .evidence_key(combined, keys)
+    keep <- if (on_duplicate == "first") {
+      !duplicated(key)
+    } else {
+      !duplicated(key, fromLast = TRUE)
+    }
+    combined <- combined[keep, , drop = FALSE]
+    rownames(combined) <- NULL
+    combined <- stamp_evidence_version(combined)
+  }
+
+  attr(combined, "evidence_collisions") <- report
+
+  cli::cli_alert_success(
+    "Bound {n_frames} evidence table{?s}: {nrow(combined)} total row{?s}"
+  )
+  if (n_dup_keys > 0L) {
+    cli::cli_alert_warning(
+      "{n_dup_keys} colliding key{?s} ({n_conflicts} with differing {.field result}); on_duplicate = {.val {on_duplicate}}."
+    )
+  }
   combined
 }
 

@@ -40,6 +40,10 @@ reference:
       - evidence_schema_version
       - migrate_evidence
       - evidence_diff
+      - evidence_delta
+      - evidence_diff_summary
+      - evidence_collisions
+      - lint_evidence
   - title: "Evidence Export & Import"
     contents:
       - export_evidence
@@ -68,6 +72,7 @@ reference:
       - result_to_score
       - severity_to_weight
       - validate_indicator
+      - dataset_variables
 
 footer:
   structure:
