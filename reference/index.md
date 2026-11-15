@@ -25,6 +25,14 @@
   : Migrate an Evidence Table to a Newer Schema Version
 - [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md)
   : Compare Two Evidence Tables
+- [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md)
+  : Signed Per-Row Score Delta for an Evidence Diff
+- [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md)
+  : Tidy Summary of an Evidence Diff
+- [`evidence_collisions()`](https://r4sub.github.io/r4subcore/reference/evidence_collisions.md)
+  : Detect Colliding Evidence Rows
+- [`lint_evidence()`](https://r4sub.github.io/r4subcore/reference/lint_evidence.md)
+  : Lint an Evidence Table
 
 ## Evidence Export & Import
 
@@ -77,3 +85,5 @@
   : Map Severity to Numeric Weight
 - [`validate_indicator()`](https://r4sub.github.io/r4subcore/reference/validate_indicator.md)
   : Validate Indicator Metadata
+- [`dataset_variables()`](https://r4sub.github.io/r4subcore/reference/dataset_variables.md)
+  : List the Variables in Each Dataset

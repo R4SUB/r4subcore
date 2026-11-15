@@ -79,6 +79,9 @@ evidence_summary(ev)
 | [`evidence_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_summary.md) | Pass/warn/fail counts by domain |
 | [`p21_to_evidence()`](https://r4sub.github.io/r4subcore/reference/p21_to_evidence.md) | Ingest Pinnacle 21 CSV output |
 | [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md) | Ingest Define-XML metadata |
+| [`dataset_variables()`](https://r4sub.github.io/r4subcore/reference/dataset_variables.md) | Build a `(dataset, variable)` table to feed [`check_define_consistency()`](https://r4sub.github.io/r4subcore/reference/check_define_consistency.md) |
+| [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md) | Append a signed per-row score delta to an [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md) result |
+| [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md) | Roll an [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md) up into a tidy `metric`/`value` diagnostic summary |
 
 ## Design Principles
 
@@ -141,6 +144,14 @@ MIT
   : Migrate an Evidence Table to a Newer Schema Version
 - [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md)
   : Compare Two Evidence Tables
+- [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md)
+  : Signed Per-Row Score Delta for an Evidence Diff
+- [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md)
+  : Tidy Summary of an Evidence Diff
+- [`evidence_collisions()`](https://r4sub.github.io/r4subcore/reference/evidence_collisions.md)
+  : Detect Colliding Evidence Rows
+- [`lint_evidence()`](https://r4sub.github.io/r4subcore/reference/lint_evidence.md)
+  : Lint an Evidence Table
 
 ## Evidence Export & Import
 
@@ -193,6 +204,8 @@ MIT
   : Map Severity to Numeric Weight
 - [`validate_indicator()`](https://r4sub.github.io/r4subcore/reference/validate_indicator.md)
   : Validate Indicator Metadata
+- [`dataset_variables()`](https://r4sub.github.io/r4subcore/reference/dataset_variables.md)
+  : List the Variables in Each Dataset
 
 # Articles
 

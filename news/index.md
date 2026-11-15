@@ -2,6 +2,68 @@
 
 ## r4subcore 0.3.1.9000 (development)
 
+- Extend
+  [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md)
+  into a collision-aware assembler and add
+  [`evidence_collisions()`](https://r4sub.github.io/r4subcore/reference/evidence_collisions.md),
+  giving downstream packages one validated way to combine evidence from
+  several adapters or indicators.
+  [`evidence_collisions()`](https://r4sub.github.io/r4subcore/reference/evidence_collisions.md)
+  groups an evidence table by the `(indicator_id, asset_id, location)`
+  key (the key is configurable) and returns every key that appears on
+  more than one row, with the row count, the distinct `result` values,
+  and a `conflict` flag that is `TRUE` when those rows disagree.
+  [`bind_evidence()`](https://r4sub.github.io/r4subcore/reference/bind_evidence.md)
+  now runs that check over the combined table, attaches the report as
+  its `evidence_collisions` attribute, and takes `on_duplicate` to keep
+  all rows (the default, so existing calls are unchanged), keep the
+  first or last row per key, or abort on any collision; it also accepts
+  a single list of frames. The logic is purely structural grouping and
+  counting – it applies no weights, thresholds, or scoring and never
+  decides which conflicting row is correct.
+- Add
+  [`lint_evidence()`](https://r4sub.github.io/r4subcore/reference/lint_evidence.md),
+  a non-fatal counterpart to
+  [`validate_evidence()`](https://r4sub.github.io/r4subcore/reference/validate_evidence.md).
+  It checks an evidence table against the schema and a few structural
+  best practices and returns every issue at once as a tidy
+  `code`/`level`/`field`/ `n`/`message` frame, instead of aborting on
+  the first problem. The checks are purely structural and reuse the
+  existing schema and version machinery: missing required columns, wrong
+  column types, `NA` in non-nullable columns, values outside a
+  controlled vocabulary, and unknown/outdated/missing schema-version
+  stamps, plus notes for unparseable `evidence_payload` JSON, duplicate
+  `(indicator_id, asset_id)` keys, and `metric_value`/`metric_unit`
+  gaps. It invents no weights, thresholds, or scoring.
+- Add
+  [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md)
+  and
+  [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md),
+  which extend
+  [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md)
+  reporting without changing its output.
+  [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md)
+  appends a signed per-row `delta` to a diff, scoring each change from
+  the existing
+  [`result_to_score()`](https://r4sub.github.io/r4subcore/reference/result_to_score.md)
+  and
+  [`severity_to_weight()`](https://r4sub.github.io/r4subcore/reference/severity_to_weight.md)
+  primitives as the movement in weighted penalty (positive means the
+  penalty fell).
+  [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md)
+  rolls a diff up into a tidy `metric`/`value` frame with the
+  per-category counts and a single `net_delta`. The net-movement figure
+  is labelled a diagnostic rollup, not the Submission Confidence Index.
+- Add
+  [`dataset_variables()`](https://r4sub.github.io/r4subcore/reference/dataset_variables.md),
+  which builds the `(dataset, variable)` table that
+  [`check_define_consistency()`](https://r4sub.github.io/r4subcore/reference/check_define_consistency.md)
+  compares against Define-XML. It reads variable names from a single
+  data frame (with a supplied dataset name), a named list of data
+  frames, or a directory of `.rds` files (one data frame each); SAS
+  transport `.xpt` files are read when the optional `haven` package is
+  installed. It only reads names and emits no scoring or evidence of its
+  own.
 - Fix the “Getting Started” vignette, which still expanded “R4SUB” as “R
   for Regulatory Submission”. It now reads “Ready for Submission”,
   matching the DESCRIPTION and the rest of the ecosystem (corrected in

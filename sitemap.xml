@@ -16,9 +16,13 @@
 <url><loc>https://r4sub.github.io/r4subcore/reference/canon_result.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/canon_severity.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/check_define_consistency.html</loc></url>
+<url><loc>https://r4sub.github.io/r4subcore/reference/dataset_variables.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/define_variables.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.html</loc></url>
+<url><loc>https://r4sub.github.io/r4subcore/reference/evidence_collisions.html</loc></url>
+<url><loc>https://r4sub.github.io/r4subcore/reference/evidence_delta.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/evidence_diff.html</loc></url>
+<url><loc>https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/evidence_schema.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/evidence_schema_spec.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/evidence_schema_version.html</loc></url>
@@ -29,6 +33,7 @@
 <url><loc>https://r4sub.github.io/r4subcore/reference/import_evidence.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/index.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/json_safely.html</loc></url>
+<url><loc>https://r4sub.github.io/r4subcore/reference/lint_evidence.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/migrate_evidence.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/normalize_01.html</loc></url>
 <url><loc>https://r4sub.github.io/r4subcore/reference/p21_to_evidence.html</loc></url>

@@ -79,6 +79,9 @@ evidence_summary(ev)
 | [`evidence_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_summary.md) | Pass/warn/fail counts by domain |
 | [`p21_to_evidence()`](https://r4sub.github.io/r4subcore/reference/p21_to_evidence.md) | Ingest Pinnacle 21 CSV output |
 | [`define_xml_to_evidence()`](https://r4sub.github.io/r4subcore/reference/define_xml_to_evidence.md) | Ingest Define-XML metadata |
+| [`dataset_variables()`](https://r4sub.github.io/r4subcore/reference/dataset_variables.md) | Build a `(dataset, variable)` table to feed [`check_define_consistency()`](https://r4sub.github.io/r4subcore/reference/check_define_consistency.md) |
+| [`evidence_delta()`](https://r4sub.github.io/r4subcore/reference/evidence_delta.md) | Append a signed per-row score delta to an [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md) result |
+| [`evidence_diff_summary()`](https://r4sub.github.io/r4subcore/reference/evidence_diff_summary.md) | Roll an [`evidence_diff()`](https://r4sub.github.io/r4subcore/reference/evidence_diff.md) up into a tidy `metric`/`value` diagnostic summary |
 
 ## Design Principles
 

@@ -208,6 +208,10 @@
 <h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
 </h2>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr>
 <th>Function</th>
 <th>Purpose</th>
@@ -240,6 +244,19 @@
 <tr>
 <td><code><a href="reference/define_xml_to_evidence.html">define_xml_to_evidence()</a></code></td>
 <td>Ingest Define-XML metadata</td>
+</tr>
+<tr>
+<td><code><a href="reference/dataset_variables.html">dataset_variables()</a></code></td>
+<td>Build a <code>(dataset, variable)</code> table to feed <code><a href="reference/check_define_consistency.html">check_define_consistency()</a></code>
+</td>
+</tr>
+<tr>
+<td><code><a href="reference/evidence_delta.html">evidence_delta()</a></code></td>
+<td>Append a signed per-row score delta to an <code><a href="reference/evidence_diff.html">evidence_diff()</a></code> result</td>
+</tr>
+<tr>
+<td><code><a href="reference/evidence_diff_summary.html">evidence_diff_summary()</a></code></td>
+<td>Roll an <code><a href="reference/evidence_diff.html">evidence_diff()</a></code> up into a tidy <code>metric</code>/<code>value</code> diagnostic summary</td>
 </tr>
 </tbody>
 </table>
